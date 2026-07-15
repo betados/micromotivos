@@ -1,10 +1,12 @@
 title: Helado al lado
-description: Dos heladeros eligen sitio en la playa. Lo mejor para los bañistas es que se repartan; lo mejor para ellos es acabar espalda con espalda en el centro. Intenta ganar la partida.
+description: Dos heladeros eligen sitio en la playa. ¿Será Lo mejor para los bañistas lo mejor para los heladeros? ¿Podrías tú ganar a tu rival?
 lang: es
 css: hotelling.css
 css: hotelling-n.css
+css: hotelling-2d.css
 js: hotelling.js
 js: hotelling-n.js
+js: hotelling-2d.js
 
 # Helado al lado
 
@@ -41,3 +43,9 @@ siempre tendrán que gastar energía en vigilar a su nuevo socio. ¿Merecerá la
 ¿Que pasaría si llegasen más vendedores a la playa? ¿Habrá equilibrio? ¿Será este equilibrio lo mejor para los bañistas?
 
 {{playa_int_varios}}
+
+Veamos que ocurre cuando damos el salto a las dos dimensiones. Esto es un modelo más realista de como funciona una 
+ciudad y puede ayudar a explicar porqué a veces parece que comercios del mismo gremio se juntan en una misma ubicación 
+de forma aparentemente irracional.
+
+{{playa_cuadrada}}

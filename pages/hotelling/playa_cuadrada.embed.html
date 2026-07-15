@@ -1,0 +1,87 @@
+<!-- The root carries n-game on purpose: that class is defined in hotelling-n.css
+     and does nothing but declare the vendor palette (--v1 … --v4). Reusing it
+     keeps the colours in one file instead of copying four hex values here. The
+     carts and chips reuse .hn-cart / .v-chip / .vhatch from that file too. -->
+<div class="game n-game d2-game">
+  <div class="d2-layout">
+    <div class="d2-board">
+      <svg id="hd-beach" viewBox="0 0 360 360" tabindex="0" role="application"
+           aria-label="Playa cuadrada. Pulsa o arrastra dentro del cuadrado para mover tu puesto; los demás heladeros se recolocan solos.">
+        <defs>
+          <pattern id="hatch-d2-1" class="vhatch v-1" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" />
+          </pattern>
+          <pattern id="hatch-d2-2" class="vhatch v-2" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" />
+          </pattern>
+          <pattern id="hatch-d2-3" class="vhatch v-3" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" />
+          </pattern>
+          <pattern id="hatch-d2-4" class="vhatch v-4" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" />
+          </pattern>
+        </defs>
+
+        <rect x="30" y="30" width="300" height="300" fill="#fff" />
+
+        <!-- One Voronoi cell per vendor, keyed to that vendor for good: the cell
+             is never re-assigned by position, or the map would change colour
+             every time two carts swapped places. -->
+        <path id="hd-cell-1" class="hd-cell" d="" fill="url(#hatch-d2-1)" />
+        <path id="hd-cell-2" class="hd-cell" d="" fill="url(#hatch-d2-2)" />
+        <path id="hd-cell-3" class="hd-cell" d="" fill="url(#hatch-d2-3)" />
+        <path id="hd-cell-4" class="hd-cell" d="" fill="url(#hatch-d2-4)" />
+
+        <rect x="30" y="30" width="300" height="300" fill="none" stroke="#222" stroke-width="1.5" />
+
+        <g id="hd-cart-1" class="hn-cart" transform="translate(120,120)">
+          <text class="hn-num" x="0" y="-12" text-anchor="middle">Tú</text>
+          <circle class="scoop v-1" cx="0" cy="0" r="7" />
+        </g>
+        <g id="hd-cart-2" class="hn-cart" transform="translate(240,120)">
+          <text class="hn-num" x="0" y="-12" text-anchor="middle">2</text>
+          <circle class="scoop v-2" cx="0" cy="0" r="7" />
+        </g>
+        <g id="hd-cart-3" class="hn-cart" transform="translate(180,240)">
+          <text class="hn-num" x="0" y="-12" text-anchor="middle">3</text>
+          <circle class="scoop v-3" cx="0" cy="0" r="7" />
+        </g>
+        <g id="hd-cart-4" class="hn-cart" transform="translate(120,240)" visibility="hidden">
+          <text class="hn-num" x="0" y="-12" text-anchor="middle">4</text>
+          <circle class="scoop v-4" cx="0" cy="0" r="7" />
+        </g>
+
+        <text id="hd-howto" x="180" y="348" text-anchor="middle">
+          Pulsa o arrastra dentro del cuadrado
+        </text>
+      </svg>
+    </div>
+
+    <div class="d2-side">
+      <div class="scoreboard" id="hd-chips">
+        <span class="v-chip" id="hd-chip-1"><span class="v-dot v-1"></span>Tú: <strong id="hd-share-1">—</strong></span>
+        <span class="v-chip" id="hd-chip-2"><span class="v-dot v-2"></span>2: <strong id="hd-share-2">—</strong></span>
+        <span class="v-chip" id="hd-chip-3"><span class="v-dot v-3"></span>3: <strong id="hd-share-3">—</strong></span>
+        <span class="v-chip" id="hd-chip-4"><span class="v-dot v-4"></span>4: <strong id="hd-share-4">—</strong></span>
+      </div>
+
+      <div class="stepper">
+        <button id="hd-less" aria-label="Quitar un heladero">−</button>
+        <span class="stepper-count"><strong id="hd-count">3</strong> heladeros</span>
+        <button id="hd-more" aria-label="Añadir un heladero">+</button>
+        <button id="hd-reset">Reiniciar</button>
+      </div>
+
+      <!-- Both messages stay in the DOM, stacked in one grid cell; the hidden one
+           keeps its size, so the box is always as tall as the longer of the two
+           and swapping them cannot resize the page. No role="status": the copy
+           changes on its own and a live region would be read out repeatedly. -->
+      <p class="n-status" id="hd-status">
+        <span class="n-msg" id="hd-msg-moving">Tus rivales se están recolocando.
+          Cada uno se muda al sitio donde más vendería, por turnos.</span>
+        <span class="n-msg off" id="hd-msg-rest">Se han parado: ninguno gana ya nada
+          mudándose. Mueve tu puesto y volverán a salir corriendo.</span>
+      </p>
+    </div>
+  </div>
+</div>
