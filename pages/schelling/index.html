@@ -1,28 +1,33 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="es">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Schelling's Model of Segregation</title>
-  <link rel="stylesheet" href="pages/schelling/schelling.css">
-  <meta name="description" content="An interactive simulation of Schelling's model of segregation.">
+  <title>Segregación sin segregacionistas</title>
+  <link rel="stylesheet" href="schelling.css">
   <meta name="theme-color" content="#fafafa">
 </head>
 
 <body>
 
   <main class="app">
-    <header>
-      <h1>Schelling's Model of Segregation</h1>
-      <p class="intro">
-        Two groups of agents live on a grid. Each agent is <em>happy</em> when at least a
-        given fraction of its occupied neighbours belong to its own group. Unhappy agents
-        relocate to a random empty cell. Even with mild preferences, the grid drifts toward
-        strong segregation.
-      </p>
-    </header>
-
+    <h1>Segregación sin segregacionistas.</h1>
+    <p>¿Son los barrios segregados racialmente fruto de una decisión consciente? ¿De una planificación centralizada? 
+    ¿Es el urbanismo el causante? O 
+    ¿Puede ser que sean el resultado agregado de las decisiones de ciudadanos individuales?</p>
+    <p>Esto se preguntaba en 1969 Thomas C. Schelling. </p>
+    <p>Su hipótesis es que las socidades, como buenos sistemas complejos, pueden dar lugar a dinámicas emergentes complejas a 
+    raiz de microdecisiones casi inconscientes de sus individuos. 
+    Aunque la sociedad no sufra de un racismo total si puede ocurrir que a alguien no le guste ser el único de su raza 
+    en el barrio. Puede que no le importe incluso estar en minoría, pero siempre suele haber algún umbral que de 
+    cruzarse le haga estar incómodo. Es entonces cuando decide mudarse. Lo que empeora el problema para los de su raza 
+    que se queden y provoca una cascada que empuja al resto a mudarse también. El único equilibrio estable acaba siendo 
+    la segregación total a pesar de ser una sociedad tolerante.</p>
+    <p>Con unas pocas reglas sencillas podemos simular este comportamiento. Dos grupos conviven en una cuadrícula. 
+    Cada individuo está <em>feliz</em> cuando al menos una determinada proporción de sus vecinos pertenece a su grupo. 
+    Los ciudadanos <em>infelices</em> se mudan a un cuadro vacío elegido de forma aleatoriamente. Incluso con discriminaciones 
+    muy ligeras la cuadrícula se segrega de forma vehemente.</p>
     <div class="layout">
       <section class="board">
         <canvas id="grid" width="500" height="500"></canvas>
@@ -67,13 +72,9 @@
         </div>
       </section>
     </div>
-
-    <footer>
-      <p>Based on Thomas Schelling's 1971 model. Vanilla HTML, CSS and JavaScript &mdash; no build step required.</p>
-    </footer>
   </main>
 
-  <script src="pages/schelling/schelling.js"></script>
+  <script src="schelling.js"></script>
 </body>
 
 </html>
