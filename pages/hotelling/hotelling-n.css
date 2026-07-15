@@ -1,0 +1,158 @@
+/* Styles for the many-vendors widget. Additive: the shared look (.game, .axis,
+   .beach-svg, .scoreboard, button) comes from hotelling.css, which this file
+   does not touch.
+
+   The vendor palette lives here and ONLY here — the markup and the script call
+   vendors .v-1 … .v-4 and never mention a hex. Validated as a set with every
+   pair treated as adjacent, because the carts reorder constantly and any two can
+   end up side by side: worst all-pairs CVD ΔE 10.8 (target 8), worst
+   normal-vision ΔE 16.1 (floor 15). The orange sits below 3:1 against the white
+   beach, so the numbers on the carts are required rather than decorative — do
+   not drop them. Adding a fifth hue needs re-validating; the sets tried all fell
+   to the 6–8 CVD floor band or below the normal-vision floor. */
+.n-game {
+  --v1: #2f6fed;   /* the site blue, as in the two-vendor widget */
+  --v2: #f08a24;   /* the site orange, likewise */
+  --v3: #008300;
+  --v4: #4a3aa7;
+}
+
+/* Territory hatching: one direction for all — identity is carried by hue plus
+   the cart's number, never by hatch angle. */
+.vhatch line {
+  stroke-width: 2.5;
+  opacity: 0.55;
+}
+
+.vhatch.v-1 line { stroke: var(--v1); }
+.vhatch.v-2 line { stroke: var(--v2); }
+.vhatch.v-3 line { stroke: var(--v3); }
+.vhatch.v-4 line { stroke: var(--v4); }
+
+.hn-bound {
+  stroke: #222;
+  stroke-width: 1;
+}
+
+.hn-cart .cone {
+  fill: #e0b070;
+  stroke: #a97c40;
+  stroke-width: 1;
+}
+
+.hn-cart .scoop {
+  stroke: #fff;
+  stroke-width: 1.5;
+}
+
+.hn-cart .scoop.v-1 { fill: var(--v1); }
+.hn-cart .scoop.v-2 { fill: var(--v2); }
+.hn-cart .scoop.v-3 { fill: var(--v3); }
+.hn-cart .scoop.v-4 { fill: var(--v4); }
+
+/* The number is a direct label, so it wears ink — never the vendor's colour. */
+.hn-num {
+  font-size: 11px;
+  font-weight: 700;
+  fill: var(--ink, #222);
+  font-family: inherit;
+}
+
+/* --- Legend / scoreboard --------------------------------------------- */
+
+.v-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.v-chip strong {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink, #222);
+}
+
+.v-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.v-dot.v-1 { background: var(--v1); }
+.v-dot.v-2 { background: var(--v2); }
+.v-dot.v-3 { background: var(--v3); }
+.v-dot.v-4 { background: var(--v4); }
+
+/* --- The vendor-count stepper ---------------------------------------- */
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0 0;
+}
+
+.stepper button {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.stepper button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.stepper button#hn-reset {
+  width: auto;
+  padding: 0 12px;
+  font-size: 0.85rem;
+  margin-left: auto;
+}
+
+.stepper-count {
+  font-size: 0.9rem;
+  color: var(--muted, #666);
+}
+
+.stepper-count strong {
+  color: var(--ink, #222);
+  font-variant-numeric: tabular-nums;
+}
+
+/* One neutral box in both states — a vendor's hue must never double as a status
+   colour, or the reader reads "green = vendor 3" and "green = settled" at once.
+   The bold text carries the state.
+
+   Both messages live in the same grid cell; the inactive one is hidden with
+   visibility, so it still takes up space and the box stays as tall as the longer
+   of the two at any width. Swapping them can never resize the page. The messages
+   must be real elements rather than bare text: a grid wraps loose text in an
+   anonymous item that wraps a line narrower than a block would, which would
+   quietly make the box taller than it needs to be. */
+.n-status {
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border-left: 3px solid var(--line, #e2e2e2);
+  background: #f7f7f7;
+  color: var(--muted, #666);
+  font-size: 0.9rem;
+  max-width: none;
+  display: grid;
+  /* Pin the column to the box. An auto column sizes to max-content, so the
+     messages would refuse to wrap and push the page sideways on a phone. */
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.n-msg {
+  grid-area: 1 / 1;
+  align-self: center;
+}
+
+.n-msg.off { visibility: hidden; }
+
+.n-status strong { color: var(--ink, #222); }

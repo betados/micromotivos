@@ -7,6 +7,7 @@
   <title>Helado al lado</title>
   <meta name="description" content="Dos heladeros eligen sitio en la playa. Lo mejor para los bañistas es que se repartan; lo mejor para ellos es acabar espalda con espalda en el centro. Intenta ganar la partida.">
   <link rel="stylesheet" href="hotelling.css">
+  <link rel="stylesheet" href="hotelling-n.css">
   <meta name="theme-color" content="#fafafa">
 </head>
 
@@ -306,9 +307,118 @@
         sabrá que le has traicionado, echará a andar para ponerse a tu lado por donde más playa haya.</span>
       </p>
     </div>
+    <p>¿Que pasaría si llegasen más vendedores a la playa? ¿Habrá equilibrio? ¿Será este equilibrio lo mejor para los bañistas?</p>
+    <div class="game n-game">
+      <svg class="beach-svg" id="hn-beach" viewBox="0 0 600 170" role="img" aria-labelledby="hn-title hn-desc">
+        <title id="hn-title">La playa con varios heladeros</title>
+        <desc id="hn-desc">
+          Los heladeros se colocan solos: por turnos, cada uno se muda al sitio donde
+          más vendería. Con dos acaban parándose en el centro y con cuatro se emparejan
+          en 1/4 y 3/4, pero con tres no se paran nunca. El reparto de cada uno se lee
+          en la lista de abajo.
+        </desc>
+
+        <defs>
+          <pattern id="hatch-n-1" class="vhatch v-1" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" />
+          </pattern>
+          <pattern id="hatch-n-2" class="vhatch v-2" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" />
+          </pattern>
+          <pattern id="hatch-n-3" class="vhatch v-3" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" />
+          </pattern>
+          <pattern id="hatch-n-4" class="vhatch v-4" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" />
+          </pattern>
+        </defs>
+
+        <rect x="50" y="55" width="500" height="30" fill="#fff" />
+
+        <!-- One territory band per vendor, keyed to that vendor for good. The band is
+             never re-assigned by left-to-right position: the carts cross each other
+             constantly, and colouring by position would repaint the whole beach every
+             time two of them swapped. -->
+        <rect id="hn-terr-1" y="55" height="30" x="50" width="0" fill="url(#hatch-n-1)" />
+        <rect id="hn-terr-2" y="55" height="30" x="50" width="0" fill="url(#hatch-n-2)" />
+        <rect id="hn-terr-3" y="55" height="30" x="50" width="0" fill="url(#hatch-n-3)" />
+        <rect id="hn-terr-4" y="55" height="30" x="50" width="0" fill="url(#hatch-n-4)" />
+
+        <rect x="50" y="55" width="500" height="30" fill="none" stroke="#222" stroke-width="1.5" />
+
+        <line id="hn-bound-1" class="hn-bound" x1="0" y1="55" x2="0" y2="85" visibility="hidden" />
+        <line id="hn-bound-2" class="hn-bound" x1="0" y1="55" x2="0" y2="85" visibility="hidden" />
+        <line id="hn-bound-3" class="hn-bound" x1="0" y1="55" x2="0" y2="85" visibility="hidden" />
+
+        <g id="hn-cart-1" class="hn-cart" transform="translate(133,0)">
+          <text class="hn-num" x="0" y="14" text-anchor="middle">1</text>
+          <path class="cone" d="M-6,32 L6,32 L0,52 Z" />
+          <circle class="scoop v-1" cx="0" cy="26" r="7" />
+        </g>
+        <g id="hn-cart-2" class="hn-cart" transform="translate(300,0)">
+          <text class="hn-num" x="0" y="14" text-anchor="middle">2</text>
+          <path class="cone" d="M-6,32 L6,32 L0,52 Z" />
+          <circle class="scoop v-2" cx="0" cy="26" r="7" />
+        </g>
+        <g id="hn-cart-3" class="hn-cart" transform="translate(466,0)">
+          <text class="hn-num" x="0" y="14" text-anchor="middle">3</text>
+          <path class="cone" d="M-6,32 L6,32 L0,52 Z" />
+          <circle class="scoop v-3" cx="0" cy="26" r="7" />
+        </g>
+        <g id="hn-cart-4" class="hn-cart" transform="translate(300,0)" visibility="hidden">
+          <text class="hn-num" x="0" y="14" text-anchor="middle">4</text>
+          <path class="cone" d="M-6,32 L6,32 L0,52 Z" />
+          <circle class="scoop v-4" cx="0" cy="26" r="7" />
+        </g>
+
+        <g class="axis">
+          <line x1="50" y1="85" x2="50" y2="93" />
+          <line x1="175" y1="85" x2="175" y2="93" />
+          <line x1="300" y1="85" x2="300" y2="93" />
+          <line x1="425" y1="85" x2="425" y2="93" />
+          <line x1="550" y1="85" x2="550" y2="93" />
+          <text x="50" y="108" text-anchor="middle">0</text>
+          <text x="175" y="108" text-anchor="middle">¼</text>
+          <text x="300" y="108" text-anchor="middle">½</text>
+          <text x="425" y="108" text-anchor="middle">¾</text>
+          <text x="550" y="108" text-anchor="middle">1</text>
+        </g>
+      </svg>
+
+      <div class="scoreboard" id="hn-chips">
+        <span class="v-chip" id="hn-chip-1"><span class="v-dot v-1"></span>1: <strong id="hn-share-1">—</strong></span>
+        <span class="v-chip" id="hn-chip-2"><span class="v-dot v-2"></span>2: <strong id="hn-share-2">—</strong></span>
+        <span class="v-chip" id="hn-chip-3"><span class="v-dot v-3"></span>3: <strong id="hn-share-3">—</strong></span>
+        <span class="v-chip" id="hn-chip-4"><span class="v-dot v-4"></span>4: <strong id="hn-share-4">—</strong></span>
+      </div>
+
+      <div class="stepper">
+        <button id="hn-less" aria-label="Quitar un heladero">−</button>
+        <span class="stepper-count"><strong id="hn-count">3</strong> heladeros</span>
+        <button id="hn-more" aria-label="Añadir un heladero">+</button>
+        <button id="hn-reset">Reiniciar</button>
+      </div>
+
+      <!-- Both messages stay in the DOM, stacked in one grid cell, and the hidden one
+           keeps its size. The box is therefore always as tall as the longer of the
+           two at whatever width the reader has, and swapping them cannot resize the
+           page — no measuring, no magic number to keep in step with the copy.
+           Reword them freely; just keep both spans.
+           No role="status" on purpose: the clock ticks every frame, and a live
+           region here would have a screen reader reading it out forever. -->
+      <p class="n-status" id="hn-status">
+        <span class="n-msg" id="hn-msg-moving">Siguen mudándose, y llevan
+          <strong id="hn-clock">0,0 s</strong> así. En cuanto uno se acomoda, a otro
+          le compensa moverse.</span>
+        <span class="n-msg off" id="hn-msg-rest">Se han parado tras
+          <strong id="hn-rested">0,0 s</strong>. Ninguno gana ya nada mudándose, así
+          que aquí se quedan.</span>
+      </p>
+    </div>
   </main>
 
   <script src="hotelling.js"></script>
+  <script src="hotelling-n.js"></script>
 </body>
 
 </html>

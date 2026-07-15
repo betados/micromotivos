@@ -2,7 +2,9 @@ title: Helado al lado
 description: Dos heladeros eligen sitio en la playa. Lo mejor para los bañistas es que se repartan; lo mejor para ellos es acabar espalda con espalda en el centro. Intenta ganar la partida.
 lang: es
 css: hotelling.css
+css: hotelling-n.css
 js: hotelling.js
+js: hotelling-n.js
 
 # Helado al lado
 
@@ -35,3 +37,7 @@ siempre tendrán que gastar energía en vigilar a su nuevo socio. ¿Merecerá la
 ¿Crees que podrías ganar a tu competidor si tú fueses uno de los heladeros?
 
 {{playa_interactiva}}
+
+¿Que pasaría si llegasen más vendedores a la playa? ¿Habrá equilibrio? ¿Será este equilibrio lo mejor para los bañistas?
+
+{{playa_int_varios}}
