@@ -163,22 +163,25 @@ p {
 .score-you strong { color: var(--blue); }
 .score-rival strong { color: var(--orange); }
 
-.control { margin-bottom: 14px; }
-
-.control label {
-  display: block;
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-bottom: 6px;
+/* The beach is the control: tap or drag anywhere on it to move your cart.
+   touch-action keeps a drag from scrolling the page on a phone. */
+#hg-beach {
+  cursor: pointer;
+  touch-action: none;
+  border-radius: 4px;
 }
 
-.control label span {
-  font-variant-numeric: tabular-nums;
+#hg-beach:focus { outline: none; }
+
+#hg-beach:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
 }
 
-input[type="range"] {
-  width: 100%;
-  accent-color: var(--blue);
+#hg-howto {
+  font-size: 12px;
+  fill: var(--muted);
+  font-family: inherit;
 }
 
 .buttons {
@@ -208,6 +211,12 @@ button.primary {
 
 button.primary:hover { background: #245ad0; }
 
+/* The box is held open at the height of the longest message it can show (see
+   reserveHeight in hotelling.js), so centre the copy — otherwise a short line
+   floats at the top of a tall box and reads as a mistake rather than as
+   reserved space. The text must live in .verdict-body: flex wraps bare text in
+   an anonymous item that wraps a line narrower than a block would, which would
+   inflate the reserved height. */
 .verdict {
   margin: 16px 0 0;
   padding: 12px 14px;
@@ -217,7 +226,11 @@ button.primary:hover { background: #245ad0; }
   color: var(--muted);
   font-size: 0.9rem;
   max-width: none;
+  display: flex;
+  align-items: center;
 }
+
+.verdict-body { flex: 1 1 100%; }
 
 .verdict strong { color: var(--ink); }
 

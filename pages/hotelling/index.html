@@ -240,9 +240,8 @@
     siempre tendrán que gastar energía en vigilar a su nuevo socio. ¿Merecerá la pena ese esfuerzo?</p>
     <p>¿Crees que podrías ganar a tu competidor si tú fueses uno de los heladeros?</p>
     <div class="game">
-      <svg class="beach-svg" id="hg-beach" viewBox="0 0 600 170" role="img" aria-labelledby="hg-title">
-        <title id="hg-title">Playa interactiva: elige dónde pones tu puesto de helados</title>
-
+      <svg class="beach-svg" id="hg-beach" viewBox="0 0 600 170" tabindex="0" role="application"
+           aria-label="Playa interactiva. Pulsa o arrastra sobre la playa para mover tu puesto de helados; también puedes usar las flechas izquierda y derecha.">
         <defs>
           <pattern id="hatch-blue-i" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
             <line x1="0" y1="0" x2="0" y2="8" stroke="#2f6fed" stroke-width="2.5" opacity="0.5" />
@@ -256,7 +255,7 @@
         <rect id="hg-terr-you" x="50" y="55" width="0" height="30" fill="url(#hatch-blue-i)" />
         <rect id="hg-terr-rival" x="50" y="55" width="0" height="30" fill="url(#hatch-orange-i)" />
         <rect x="50" y="55" width="500" height="30" fill="none" stroke="#222" stroke-width="1.5" />
-        <line id="hg-boundary" x1="300" y1="55" x2="300" y2="85" stroke="#222" stroke-width="1.5" visibility="hidden" />
+        <line id="hg-boundary" x1="300" y1="55" x2="300" y2="85" stroke="#222" stroke-width="1.5" />
 
         <!-- No text labels on the carts: back to back they would overlap. The
              colours carry it — they match the scoreboard below. -->
@@ -265,7 +264,7 @@
           <circle cx="0" cy="26" r="8" fill="#2f6fed" stroke="#fff" stroke-width="1.5" />
         </g>
 
-        <g id="hg-rival" transform="translate(425,0)" visibility="hidden">
+        <g id="hg-rival" transform="translate(425,0)">
           <path d="M-7,32 L7,32 L0,54 Z" fill="#e0b070" stroke="#a97c40" stroke-width="1" />
           <circle cx="0" cy="26" r="8" fill="#f08a24" stroke="#fff" stroke-width="1.5" />
         </g>
@@ -282,28 +281,29 @@
           <text x="425" y="108" text-anchor="middle">¾</text>
           <text x="550" y="108" text-anchor="middle">1</text>
         </g>
+
+        <text id="hg-howto" x="300" y="142" text-anchor="middle">
+          Pulsa o arrastra sobre la playa para mover tu puesto
+        </text>
       </svg>
 
       <div class="scoreboard">
-        <span class="score score-you">Tú: <strong id="hg-share-you">—</strong></span>
-        <span class="score score-rival">Rival: <strong id="hg-share-rival">—</strong></span>
-        <span class="score">Intentos: <strong id="hg-tries">0</strong></span>
+        <span class="score score-you">Tú: <strong id="hg-share-you">50,0%</strong></span>
+        <span class="score score-rival">Rival: <strong id="hg-share-rival">50,0%</strong></span>
+        <span class="score">Tu posición: <strong id="hg-pos-val">0,25</strong></span>
       </div>
 
-      <div class="game-controls">
-        <div class="control">
-          <label for="hg-pos">Tu posición en la playa: <span id="hg-pos-val">0,25</span></label>
-          <input type="range" id="hg-pos" min="0" max="100" step="1" value="25">
-        </div>
-        <div class="buttons">
-          <button id="hg-play" class="primary">¡Abre el puesto!</button>
-          <button id="hg-reset">Otra vez</button>
-        </div>
+      <div class="buttons">
+        <button id="hg-reset">Volver a ¼ y ¾</button>
       </div>
 
-      <p class="verdict" id="hg-verdict">
-        Coloca tu puesto donde quieras. Tu rival elegirá <em>después</em>, y lo hará
-        de la mejor forma posible para él.
+      <!-- The inner span is load-bearing, not decoration: the box is centred, and a
+           flex container wraps bare text in an anonymous item that wraps one line
+           narrower than a plain block would. A real child avoids that. Edit the
+           opening line here — the script reads it from this element. -->
+      <p class="verdict" id="hg-verdict" role="status">
+        <span class="verdict-body" id="hg-verdict-body">Habéis acordado la situación optima. Cuidado, si te mueves tu rival no se quedará quieto. En cuanto te vea moverte
+        sabrá que le has traicionado, echará a andar para ponerse a tu lado por donde más playa haya.</span>
       </p>
     </div>
   </main>
