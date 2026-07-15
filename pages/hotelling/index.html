@@ -1,0 +1,314 @@
+<!doctype html>
+<html class="no-js" lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Helado al lado</title>
+  <meta name="description" content="Dos heladeros eligen sitio en la playa. Lo mejor para los bañistas es que se repartan; lo mejor para ellos es acabar espalda con espalda en el centro. Intenta ganar la partida.">
+  <link rel="stylesheet" href="hotelling.css">
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+
+  <main class="app">
+    <h1>Helado al lado</h1>
+    <p>Imagina que a una playa llena de bañistas acuden dos heladeros. Ambos tienen libertad para elegir la ubicación que 
+    prefieran a lo largo de esta. Lo ideal para los bañistas sería que los heladeros se ubicasen en las posiciones 1/4 y 
+    3/4 de la playa respectivamente. De esta forma los bañistas tendrán que recorrer como mucho un cuarto de la distancia de la playa 
+    para poder comprar un helado.  </p>
+    <figure class="beach-figure">
+      <svg class="beach-svg" viewBox="0 0 600 170" role="img" aria-labelledby="playa1-title playa1-desc">
+        <title id="playa1-title">Los dos heladeros en 1/4 y 3/4 de la playa</title>
+        <desc id="playa1-desc">
+          La playa va de 0 a 1. El heladero azul está en 1/4 y el naranja en 3/4. La
+          frontera de clientes cae en 1/2: cada uno atiende media playa y nadie camina
+          más de un cuarto.
+        </desc>
+
+        <defs>
+          <pattern id="hatch-blue-1" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="#2f6fed" stroke-width="2.5" opacity="0.5" />
+          </pattern>
+          <pattern id="hatch-orange-1" width="8" height="8" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="#f08a24" stroke-width="2.5" opacity="0.5" />
+          </pattern>
+        </defs>
+
+        <!-- Territories: split at the midpoint between the two vendors. -->
+        <rect x="50" y="55" width="250" height="30" fill="#fff" />
+        <rect x="50" y="55" width="250" height="30" fill="url(#hatch-blue-1)" />
+        <rect x="300" y="55" width="250" height="30" fill="#fff" />
+        <rect x="300" y="55" width="250" height="30" fill="url(#hatch-orange-1)" />
+        <rect x="50" y="55" width="500" height="30" fill="none" stroke="#222" stroke-width="1.5" />
+        <line x1="300" y1="55" x2="300" y2="85" stroke="#222" stroke-width="1.5" />
+
+        <!-- Vendors -->
+        <g class="vendor">
+          <text x="175" y="14" text-anchor="middle" class="vendor-label">Heladero A</text>
+          <path d="M168,32 L182,32 L175,54 Z" fill="#e0b070" stroke="#a97c40" stroke-width="1" />
+          <circle cx="175" cy="26" r="8" fill="#2f6fed" />
+        </g>
+        <g class="vendor">
+          <text x="425" y="14" text-anchor="middle" class="vendor-label">Heladero B</text>
+          <path d="M418,32 L432,32 L425,54 Z" fill="#e0b070" stroke="#a97c40" stroke-width="1" />
+          <circle cx="425" cy="26" r="8" fill="#f08a24" />
+        </g>
+
+        <!-- Axis -->
+        <g class="axis">
+          <line x1="50" y1="85" x2="50" y2="93" />
+          <line x1="175" y1="85" x2="175" y2="93" />
+          <line x1="300" y1="85" x2="300" y2="93" />
+          <line x1="425" y1="85" x2="425" y2="93" />
+          <line x1="550" y1="85" x2="550" y2="93" />
+          <text x="50" y="108" text-anchor="middle">0</text>
+          <text x="175" y="108" text-anchor="middle">¼</text>
+          <text x="300" y="108" text-anchor="middle">½</text>
+          <text x="425" y="108" text-anchor="middle">¾</text>
+          <text x="550" y="108" text-anchor="middle">1</text>
+        </g>
+
+        <!-- Worst walk for a bather at the far edge -->
+        <g class="walk">
+          <line x1="50" y1="140" x2="175" y2="140" />
+          <polygon points="50,140 58,136 58,144" />
+          <polygon points="175,140 167,136 167,144" />
+          <text x="112" y="158" text-anchor="middle">camina ¼</text>
+        </g>
+      </svg>
+      <figcaption>
+        El reparto que querrían los bañistas: cada heladero se queda con media playa y
+        al bañista más alejado le basta con andar un cuarto.
+      </figcaption>
+    </figure>
+    <p>Esta distribución, ideal teóricamente, tiene un peligro. Nada impide que un heladero listillo se acerque 
+    ligeramente al centro. De esta forma le robaría los clientes más proximos al centro a su competidor. </p>
+    <figure class="beach-figure">
+      <svg class="beach-svg" viewBox="0 0 600 170" role="img" aria-labelledby="playa2-title playa2-desc">
+        <title id="playa2-title">El heladero A se acerca un poco al centro y le roba clientes a B</title>
+        <desc id="playa2-desc">
+          La playa va de 0 a 1. El heladero azul se ha movido de 1/4 a 3/8, mientras
+          que el naranja sigue en 3/4. La frontera de clientes se desplaza de 1/2 a
+          9/16: el azul se queda con 9/16 de la playa y el naranja con 7/16.
+        </desc>
+
+        <defs>
+          <pattern id="hatch-blue-2" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="#2f6fed" stroke-width="2.5" opacity="0.5" />
+          </pattern>
+          <pattern id="hatch-orange-2" width="8" height="8" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="#f08a24" stroke-width="2.5" opacity="0.5" />
+          </pattern>
+        </defs>
+
+        <!-- The split is the midpoint of ⅜ and ¾ — it has slid from ½ to ⁹⁄₁₆. -->
+        <rect x="50" y="55" width="281.25" height="30" fill="#fff" />
+        <rect x="50" y="55" width="281.25" height="30" fill="url(#hatch-blue-2)" />
+        <rect x="331.25" y="55" width="218.75" height="30" fill="#fff" />
+        <rect x="331.25" y="55" width="218.75" height="30" fill="url(#hatch-orange-2)" />
+        <rect x="50" y="55" width="500" height="30" fill="none" stroke="#222" stroke-width="1.5" />
+        <line x1="331.25" y1="55" x2="331.25" y2="85" stroke="#222" stroke-width="1.5" />
+
+        <!-- Where A used to stand, and the small step it just took -->
+        <g class="ghost">
+          <path d="M168,32 L182,32 L175,54 Z" />
+          <circle cx="175" cy="26" r="8" />
+        </g>
+        <g class="move">
+          <line x1="188" y1="44" x2="221" y2="44" />
+          <polygon points="229,44 219,39 219,49" />
+        </g>
+
+        <g class="vendor">
+          <text x="237.5" y="14" text-anchor="middle" class="vendor-label">Heladero A</text>
+          <path d="M230.5,32 L244.5,32 L237.5,54 Z" fill="#e0b070" stroke="#a97c40" stroke-width="1" />
+          <circle cx="237.5" cy="26" r="8" fill="#2f6fed" />
+        </g>
+        <g class="vendor">
+          <text x="425" y="14" text-anchor="middle" class="vendor-label">Heladero B</text>
+          <path d="M418,32 L432,32 L425,54 Z" fill="#e0b070" stroke="#a97c40" stroke-width="1" />
+          <circle cx="425" cy="26" r="8" fill="#f08a24" />
+        </g>
+
+        <!-- Axis -->
+        <g class="axis">
+          <line x1="50" y1="85" x2="50" y2="93" />
+          <line x1="175" y1="85" x2="175" y2="93" />
+          <line x1="300" y1="85" x2="300" y2="93" />
+          <line x1="425" y1="85" x2="425" y2="93" />
+          <line x1="550" y1="85" x2="550" y2="93" />
+          <text x="50" y="108" text-anchor="middle">0</text>
+          <text x="175" y="108" text-anchor="middle">¼</text>
+          <text x="300" y="108" text-anchor="middle">½</text>
+          <text x="425" y="108" text-anchor="middle">¾</text>
+          <text x="550" y="108" text-anchor="middle">1</text>
+        </g>
+
+        <!-- The new border, called out because it is the whole point of the move -->
+        <g class="border-mark">
+          <line x1="331.25" y1="85" x2="331.25" y2="93" />
+          <text x="337" y="108">⁹⁄₁₆</text>
+        </g>
+
+        <!-- The strip that changed hands: it was B's, now it is A's -->
+        <g class="steal">
+          <rect x="300" y="53" width="31.25" height="34" />
+          <line x1="315.6" y1="87" x2="315.6" y2="126" />
+          <text x="315.6" y="142" text-anchor="middle">Robado a B</text>
+        </g>
+      </svg>
+      <figcaption>
+        A da un paso hacia el centro y la frontera se va con él. Esa franja cambia de manos sin que B se haya movido.
+      </figcaption>
+    </figure>
+    <p>Al otro no se le 
+    había ocurrido, pero no es tonto, por lo que se acerca el centro en la misma medida mas un extra por si la vista le 
+    está fallando, no vaya a ser. El primero aprovecha que el segundo está despachando unos helados para ganar otro poquito 
+    de terreno y el ciclo vuelve a empezar hasta que finalmente se encuentran espalda con espalda en la mitad de la playa.</p>
+    <figure class="beach-figure">
+      <svg class="beach-svg" viewBox="0 0 600 170" role="img" aria-labelledby="playa3-title playa3-desc">
+        <title id="playa3-title">Los dos heladeros espalda con espalda en el centro</title>
+        <desc id="playa3-desc">
+          La playa va de 0 a 1. Los dos heladeros están pegados en el medio. Se siguen
+          repartiendo media playa cada uno, pero ahora el bañista del extremo ha de
+          caminar media playa.
+        </desc>
+
+        <defs>
+          <pattern id="hatch-blue-3" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="#2f6fed" stroke-width="2.5" opacity="0.5" />
+          </pattern>
+          <pattern id="hatch-orange-3" width="8" height="8" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="#f08a24" stroke-width="2.5" opacity="0.5" />
+          </pattern>
+        </defs>
+
+        <!-- Same 50/50 split as before: the midpoint between two carts at ½ is still ½. -->
+        <rect x="50" y="55" width="250" height="30" fill="#fff" />
+        <rect x="50" y="55" width="250" height="30" fill="url(#hatch-blue-3)" />
+        <rect x="300" y="55" width="250" height="30" fill="#fff" />
+        <rect x="300" y="55" width="250" height="30" fill="url(#hatch-orange-3)" />
+        <rect x="50" y="55" width="500" height="30" fill="none" stroke="#222" stroke-width="1.5" />
+        <line x1="300" y1="55" x2="300" y2="85" stroke="#222" stroke-width="1.5" />
+
+        <!-- Vendors, nudged apart just enough to draw them back to back -->
+        <g class="vendor">
+          <text x="252" y="14" text-anchor="middle" class="vendor-label">Heladero A</text>
+          <path d="M282,32 L294,32 L288,54 Z" fill="#e0b070" stroke="#a97c40" stroke-width="1" />
+          <circle cx="288" cy="26" r="8" fill="#2f6fed" />
+        </g>
+        <g class="vendor">
+          <text x="348" y="14" text-anchor="middle" class="vendor-label">Heladero B</text>
+          <path d="M306,32 L318,32 L312,54 Z" fill="#e0b070" stroke="#a97c40" stroke-width="1" />
+          <circle cx="312" cy="26" r="8" fill="#f08a24" />
+        </g>
+
+        <!-- Axis -->
+        <g class="axis">
+          <line x1="50" y1="85" x2="50" y2="93" />
+          <line x1="175" y1="85" x2="175" y2="93" />
+          <line x1="300" y1="85" x2="300" y2="93" />
+          <line x1="425" y1="85" x2="425" y2="93" />
+          <line x1="550" y1="85" x2="550" y2="93" />
+          <text x="50" y="108" text-anchor="middle">0</text>
+          <text x="175" y="108" text-anchor="middle">¼</text>
+          <text x="300" y="108" text-anchor="middle">½</text>
+          <text x="425" y="108" text-anchor="middle">¾</text>
+          <text x="550" y="108" text-anchor="middle">1</text>
+        </g>
+
+        <!-- Worst walk for a bather at the far edge: now twice as long -->
+        <g class="walk">
+          <line x1="50" y1="140" x2="300" y2="140" />
+          <polygon points="50,140 58,136 58,144" />
+          <polygon points="300,140 292,136 292,144" />
+          <text x="175" y="158" text-anchor="middle">camina ½</text>
+        </g>
+      </svg>
+      <figcaption>
+        El equilibrio: el reparto de clientes no ha cambiado — 50% cada uno — pero al
+        bañista del extremo le ha tocado el doble de caminata.
+      </figcaption>
+    </figure>
+    <p>Se han quedado igual, repartiendose los clientes al 50%, pero ha empeorado su servicio pues los bañistas de los 
+    extremos ahora han
+    de recorrer la mitad de la playa. De hecho puede que estén peor porque esa lontananza puede disuadir a alguno de los 
+    menos apetentes. Ninguno de los heladeros se va a mover pues sería regalarle terreno a su competidor. 
+    Mientras están espalda con espalda podrían aprovechar para acordar volver a las posiciones de 1/4 y 3/4 pero 
+    siempre tendrán que gastar energía en vigilar a su nuevo socio. ¿Merecerá la pena ese esfuerzo?</p>
+    <p>¿Crees que podrías ganar a tu competidor si tú fueses uno de los heladeros?</p>
+    <div class="game">
+      <svg class="beach-svg" id="hg-beach" viewBox="0 0 600 170" role="img" aria-labelledby="hg-title">
+        <title id="hg-title">Playa interactiva: elige dónde pones tu puesto de helados</title>
+
+        <defs>
+          <pattern id="hatch-blue-i" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="#2f6fed" stroke-width="2.5" opacity="0.5" />
+          </pattern>
+          <pattern id="hatch-orange-i" width="8" height="8" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="#f08a24" stroke-width="2.5" opacity="0.5" />
+          </pattern>
+        </defs>
+
+        <rect x="50" y="55" width="500" height="30" fill="#fff" />
+        <rect id="hg-terr-you" x="50" y="55" width="0" height="30" fill="url(#hatch-blue-i)" />
+        <rect id="hg-terr-rival" x="50" y="55" width="0" height="30" fill="url(#hatch-orange-i)" />
+        <rect x="50" y="55" width="500" height="30" fill="none" stroke="#222" stroke-width="1.5" />
+        <line id="hg-boundary" x1="300" y1="55" x2="300" y2="85" stroke="#222" stroke-width="1.5" visibility="hidden" />
+
+        <!-- No text labels on the carts: back to back they would overlap. The
+             colours carry it — they match the scoreboard below. -->
+        <g id="hg-you" transform="translate(175,0)">
+          <path d="M-7,32 L7,32 L0,54 Z" fill="#e0b070" stroke="#a97c40" stroke-width="1" />
+          <circle cx="0" cy="26" r="8" fill="#2f6fed" stroke="#fff" stroke-width="1.5" />
+        </g>
+
+        <g id="hg-rival" transform="translate(425,0)" visibility="hidden">
+          <path d="M-7,32 L7,32 L0,54 Z" fill="#e0b070" stroke="#a97c40" stroke-width="1" />
+          <circle cx="0" cy="26" r="8" fill="#f08a24" stroke="#fff" stroke-width="1.5" />
+        </g>
+
+        <g class="axis">
+          <line x1="50" y1="85" x2="50" y2="93" />
+          <line x1="175" y1="85" x2="175" y2="93" />
+          <line x1="300" y1="85" x2="300" y2="93" />
+          <line x1="425" y1="85" x2="425" y2="93" />
+          <line x1="550" y1="85" x2="550" y2="93" />
+          <text x="50" y="108" text-anchor="middle">0</text>
+          <text x="175" y="108" text-anchor="middle">¼</text>
+          <text x="300" y="108" text-anchor="middle">½</text>
+          <text x="425" y="108" text-anchor="middle">¾</text>
+          <text x="550" y="108" text-anchor="middle">1</text>
+        </g>
+      </svg>
+
+      <div class="scoreboard">
+        <span class="score score-you">Tú: <strong id="hg-share-you">—</strong></span>
+        <span class="score score-rival">Rival: <strong id="hg-share-rival">—</strong></span>
+        <span class="score">Intentos: <strong id="hg-tries">0</strong></span>
+      </div>
+
+      <div class="game-controls">
+        <div class="control">
+          <label for="hg-pos">Tu posición en la playa: <span id="hg-pos-val">0,25</span></label>
+          <input type="range" id="hg-pos" min="0" max="100" step="1" value="25">
+        </div>
+        <div class="buttons">
+          <button id="hg-play" class="primary">¡Abre el puesto!</button>
+          <button id="hg-reset">Otra vez</button>
+        </div>
+      </div>
+
+      <p class="verdict" id="hg-verdict">
+        Coloca tu puesto donde quieras. Tu rival elegirá <em>después</em>, y lo hará
+        de la mejor forma posible para él.
+      </p>
+    </div>
+  </main>
+
+  <script src="hotelling.js"></script>
+</body>
+
+</html>

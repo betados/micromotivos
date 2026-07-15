@@ -1,0 +1,236 @@
+:root {
+  --blue: #2f6fed;
+  --orange: #f08a24;
+  --bg: #fafafa;
+  --panel: #ffffff;
+  --ink: #222;
+  --muted: #666;
+  --line: #e2e2e2;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.5;
+}
+
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+}
+
+h1 {
+  font-size: 1.6rem;
+  margin: 0 0 16px;
+}
+
+p {
+  max-width: 62ch;
+}
+
+/* --- The two static schemas ------------------------------------------- */
+
+.beach-figure {
+  margin: 28px 0;
+  padding: 8px 0 0;
+}
+
+.beach-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.beach-svg .vendor-label {
+  font-size: 12px;
+  fill: var(--muted);
+  font-family: inherit;
+}
+
+.beach-svg .axis line {
+  stroke: #222;
+  stroke-width: 1;
+}
+
+.beach-svg .axis text {
+  font-size: 13px;
+  fill: var(--ink);
+  font-family: inherit;
+}
+
+.beach-svg .walk line {
+  stroke: var(--muted);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+.beach-svg .walk polygon {
+  fill: var(--muted);
+}
+
+.beach-svg .walk text {
+  font-size: 12px;
+  fill: var(--muted);
+  font-family: inherit;
+}
+
+/* Where a vendor used to stand, before the move that stole the strip. */
+.beach-svg .ghost path,
+.beach-svg .ghost circle {
+  fill: none;
+  stroke: #bbb;
+  stroke-width: 1.2;
+  stroke-dasharray: 3 2;
+}
+
+.beach-svg .move line {
+  stroke: var(--blue);
+  stroke-width: 1.5;
+}
+
+.beach-svg .move polygon {
+  fill: var(--blue);
+}
+
+.beach-svg .steal rect {
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 2;
+}
+
+.beach-svg .steal line {
+  stroke: var(--orange);
+  stroke-width: 1;
+  stroke-dasharray: 3 2;
+}
+
+.beach-svg .steal text {
+  font-size: 12px;
+  fill: var(--orange);
+  font-weight: 600;
+  font-family: inherit;
+}
+
+.beach-svg .border-mark line {
+  stroke: #222;
+  stroke-width: 1;
+}
+
+.beach-svg .border-mark text {
+  font-size: 13px;
+  fill: var(--ink);
+  font-weight: 600;
+  font-family: inherit;
+}
+
+.beach-figure figcaption {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  max-width: 62ch;
+}
+
+/* --- The game --------------------------------------------------------- */
+
+.game {
+  margin: 28px 0;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.scoreboard {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin: 4px 0 16px;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.scoreboard strong {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.score-you strong { color: var(--blue); }
+.score-rival strong { color: var(--orange); }
+
+.control { margin-bottom: 14px; }
+
+.control label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.control label span {
+  font-variant-numeric: tabular-nums;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--blue);
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+}
+
+button {
+  flex: 1;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+button:hover { background: #f4f4f4; }
+
+button.primary {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+button.primary:hover { background: #245ad0; }
+
+.verdict {
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  border-radius: 6px;
+  border-left: 3px solid var(--line);
+  background: #f7f7f7;
+  color: var(--muted);
+  font-size: 0.9rem;
+  max-width: none;
+}
+
+.verdict strong { color: var(--ink); }
+
+.verdict.bad {
+  border-left-color: var(--orange);
+  background: #fff7ee;
+}
+
+.verdict.ok {
+  border-left-color: var(--blue);
+  background: #eef4ff;
+}
+
+@media (max-width: 34rem) {
+  .buttons { flex-direction: column; }
+}

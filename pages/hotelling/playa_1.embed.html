@@ -1,0 +1,65 @@
+<figure class="beach-figure">
+  <svg class="beach-svg" viewBox="0 0 600 170" role="img" aria-labelledby="playa1-title playa1-desc">
+    <title id="playa1-title">Los dos heladeros en 1/4 y 3/4 de la playa</title>
+    <desc id="playa1-desc">
+      La playa va de 0 a 1. El heladero azul está en 1/4 y el naranja en 3/4. La
+      frontera de clientes cae en 1/2: cada uno atiende media playa y nadie camina
+      más de un cuarto.
+    </desc>
+
+    <defs>
+      <pattern id="hatch-blue-1" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="8" stroke="#2f6fed" stroke-width="2.5" opacity="0.5" />
+      </pattern>
+      <pattern id="hatch-orange-1" width="8" height="8" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="0" y2="8" stroke="#f08a24" stroke-width="2.5" opacity="0.5" />
+      </pattern>
+    </defs>
+
+    <!-- Territories: split at the midpoint between the two vendors. -->
+    <rect x="50" y="55" width="250" height="30" fill="#fff" />
+    <rect x="50" y="55" width="250" height="30" fill="url(#hatch-blue-1)" />
+    <rect x="300" y="55" width="250" height="30" fill="#fff" />
+    <rect x="300" y="55" width="250" height="30" fill="url(#hatch-orange-1)" />
+    <rect x="50" y="55" width="500" height="30" fill="none" stroke="#222" stroke-width="1.5" />
+    <line x1="300" y1="55" x2="300" y2="85" stroke="#222" stroke-width="1.5" />
+
+    <!-- Vendors -->
+    <g class="vendor">
+      <text x="175" y="14" text-anchor="middle" class="vendor-label">Heladero A</text>
+      <path d="M168,32 L182,32 L175,54 Z" fill="#e0b070" stroke="#a97c40" stroke-width="1" />
+      <circle cx="175" cy="26" r="8" fill="#2f6fed" />
+    </g>
+    <g class="vendor">
+      <text x="425" y="14" text-anchor="middle" class="vendor-label">Heladero B</text>
+      <path d="M418,32 L432,32 L425,54 Z" fill="#e0b070" stroke="#a97c40" stroke-width="1" />
+      <circle cx="425" cy="26" r="8" fill="#f08a24" />
+    </g>
+
+    <!-- Axis -->
+    <g class="axis">
+      <line x1="50" y1="85" x2="50" y2="93" />
+      <line x1="175" y1="85" x2="175" y2="93" />
+      <line x1="300" y1="85" x2="300" y2="93" />
+      <line x1="425" y1="85" x2="425" y2="93" />
+      <line x1="550" y1="85" x2="550" y2="93" />
+      <text x="50" y="108" text-anchor="middle">0</text>
+      <text x="175" y="108" text-anchor="middle">¼</text>
+      <text x="300" y="108" text-anchor="middle">½</text>
+      <text x="425" y="108" text-anchor="middle">¾</text>
+      <text x="550" y="108" text-anchor="middle">1</text>
+    </g>
+
+    <!-- Worst walk for a bather at the far edge -->
+    <g class="walk">
+      <line x1="50" y1="140" x2="175" y2="140" />
+      <polygon points="50,140 58,136 58,144" />
+      <polygon points="175,140 167,136 167,144" />
+      <text x="112" y="158" text-anchor="middle">camina ¼</text>
+    </g>
+  </svg>
+  <figcaption>
+    El reparto que querrían los bañistas: cada heladero se queda con media playa y
+    al bañista más alejado le basta con andar un cuarto.
+  </figcaption>
+</figure>

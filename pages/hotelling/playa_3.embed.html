@@ -1,0 +1,65 @@
+<figure class="beach-figure">
+  <svg class="beach-svg" viewBox="0 0 600 170" role="img" aria-labelledby="playa3-title playa3-desc">
+    <title id="playa3-title">Los dos heladeros espalda con espalda en el centro</title>
+    <desc id="playa3-desc">
+      La playa va de 0 a 1. Los dos heladeros están pegados en el medio. Se siguen
+      repartiendo media playa cada uno, pero ahora el bañista del extremo ha de
+      caminar media playa.
+    </desc>
+
+    <defs>
+      <pattern id="hatch-blue-3" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="8" stroke="#2f6fed" stroke-width="2.5" opacity="0.5" />
+      </pattern>
+      <pattern id="hatch-orange-3" width="8" height="8" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="0" y2="8" stroke="#f08a24" stroke-width="2.5" opacity="0.5" />
+      </pattern>
+    </defs>
+
+    <!-- Same 50/50 split as before: the midpoint between two carts at ½ is still ½. -->
+    <rect x="50" y="55" width="250" height="30" fill="#fff" />
+    <rect x="50" y="55" width="250" height="30" fill="url(#hatch-blue-3)" />
+    <rect x="300" y="55" width="250" height="30" fill="#fff" />
+    <rect x="300" y="55" width="250" height="30" fill="url(#hatch-orange-3)" />
+    <rect x="50" y="55" width="500" height="30" fill="none" stroke="#222" stroke-width="1.5" />
+    <line x1="300" y1="55" x2="300" y2="85" stroke="#222" stroke-width="1.5" />
+
+    <!-- Vendors, nudged apart just enough to draw them back to back -->
+    <g class="vendor">
+      <text x="252" y="14" text-anchor="middle" class="vendor-label">Heladero A</text>
+      <path d="M282,32 L294,32 L288,54 Z" fill="#e0b070" stroke="#a97c40" stroke-width="1" />
+      <circle cx="288" cy="26" r="8" fill="#2f6fed" />
+    </g>
+    <g class="vendor">
+      <text x="348" y="14" text-anchor="middle" class="vendor-label">Heladero B</text>
+      <path d="M306,32 L318,32 L312,54 Z" fill="#e0b070" stroke="#a97c40" stroke-width="1" />
+      <circle cx="312" cy="26" r="8" fill="#f08a24" />
+    </g>
+
+    <!-- Axis -->
+    <g class="axis">
+      <line x1="50" y1="85" x2="50" y2="93" />
+      <line x1="175" y1="85" x2="175" y2="93" />
+      <line x1="300" y1="85" x2="300" y2="93" />
+      <line x1="425" y1="85" x2="425" y2="93" />
+      <line x1="550" y1="85" x2="550" y2="93" />
+      <text x="50" y="108" text-anchor="middle">0</text>
+      <text x="175" y="108" text-anchor="middle">¼</text>
+      <text x="300" y="108" text-anchor="middle">½</text>
+      <text x="425" y="108" text-anchor="middle">¾</text>
+      <text x="550" y="108" text-anchor="middle">1</text>
+    </g>
+
+    <!-- Worst walk for a bather at the far edge: now twice as long -->
+    <g class="walk">
+      <line x1="50" y1="140" x2="300" y2="140" />
+      <polygon points="50,140 58,136 58,144" />
+      <polygon points="300,140 292,136 292,144" />
+      <text x="175" y="158" text-anchor="middle">camina ½</text>
+    </g>
+  </svg>
+  <figcaption>
+    El equilibrio: el reparto de clientes no ha cambiado — 50% cada uno — pero al
+    bañista del extremo le ha tocado el doble de caminata.
+  </figcaption>
+</figure>
