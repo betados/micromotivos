@@ -9,12 +9,17 @@ For every model folder `pages/<model>/` the generator:
   4. wraps the result in the shared shell `templates/page.html`,
   5. writes `pages/<model>/index.html`.
 
+It then writes the landing page `pages/index.html` from `templates/landing.html`,
+listing every model. `pages/` is the site root in production, so the landing is
+served at `/` and each model at `/<model>/`.
+
 Front-matter keys (all optional except `title`):
 
-    title:  page <title> and browser tab
-    lang:   <html lang="…">              (default: en)
-    css:    stylesheet to link           (may be repeated)
-    js:     script to link               (may be repeated)
+    title:        page <title> and browser tab
+    description:  <meta name="description"> and the model's blurb on the landing
+    lang:         <html lang="…">              (default: en)
+    css:          stylesheet to link           (may be repeated)
+    js:           script to link               (may be repeated)
 
 Asset paths in `css`/`js` are resolved relative to the generated
 `pages/<model>/index.html`. Assets that live in the model folder are named
@@ -23,10 +28,11 @@ directly (`schelling.css`); a shared asset is a path out of the folder
 no build step to *serve* — only to regenerate.
 
 Usage:
-    python3 build.py            # build every model under pages/
-    python3 build.py schelling  # build just one model
+    python3 build.py            # build every model under pages/, then the landing
+    python3 build.py schelling  # build just one model, then the landing
 """
 
+import html as html_mod
 import os
 import re
 import sys
@@ -36,9 +42,32 @@ import markdown
 ROOT = os.path.dirname(os.path.abspath(__file__))
 PAGES_DIR = os.path.join(ROOT, "pages")
 TEMPLATE = os.path.join(ROOT, "templates", "page.html")
+LANDING_TEMPLATE = os.path.join(ROOT, "templates", "landing.html")
 
 # {{token}}, optionally wrapped in the <p> markdown puts around a lone line.
 TOKEN_RE = re.compile(r"(?:<p>\s*)?\{\{\s*([\w.-]+)\s*\}\}(?:\s*</p>)?")
+
+
+def essay_path(page_dir):
+    """Return the essay for a model folder: <model>.md, or its only .md file."""
+    model = os.path.basename(page_dir.rstrip(os.sep))
+    md_path = os.path.join(page_dir, model + ".md")
+    if os.path.exists(md_path):
+        return md_path
+    mds = [f for f in os.listdir(page_dir) if f.endswith(".md")]
+    if len(mds) != 1:
+        raise SystemExit(
+            f"error: {page_dir}: expected {model}.md or exactly one .md file"
+        )
+    return os.path.join(page_dir, mds[0])
+
+
+def model_dirs():
+    return [
+        os.path.join(PAGES_DIR, name)
+        for name in sorted(os.listdir(PAGES_DIR))
+        if os.path.isdir(os.path.join(PAGES_DIR, name))
+    ]
 
 
 def render_markdown(md_path):
@@ -95,14 +124,7 @@ def indent(block, spaces):
 
 def build_page(page_dir, template):
     model = os.path.basename(page_dir.rstrip(os.sep))
-    md_path = os.path.join(page_dir, model + ".md")
-    if not os.path.exists(md_path):
-        mds = [f for f in os.listdir(page_dir) if f.endswith(".md")]
-        if len(mds) != 1:
-            raise SystemExit(
-                f"error: {page_dir}: expected {model}.md or exactly one .md file"
-            )
-        md_path = os.path.join(page_dir, mds[0])
+    md_path = essay_path(page_dir)
 
     html, meta = render_markdown(md_path)
     html = embed_fragments(html, page_dir)
@@ -112,11 +134,18 @@ def build_page(page_dir, template):
 
     title = meta.get("title", [model])[0]
     lang = meta.get("lang", ["en"])[0]
+    description = " ".join(meta.get("description", []))
+    description_tag = (
+        f'  <meta name="description" content="{html_mod.escape(description, quote=True)}">'
+        if description
+        else ""
+    )
 
     page = (
         template
         .replace("{lang}", lang)
         .replace("{title}", title)
+        .replace("{description}", description_tag)
         .replace("{styles}", styles)
         .replace("{scripts}", scripts)
         .replace("{content}", indent(html, 4))
@@ -127,23 +156,71 @@ def build_page(page_dir, template):
     print(f"built {os.path.relpath(out_path, ROOT)}")
 
 
+def model_info(page_dir):
+    """Return {slug, title, description} for a model, read from its front-matter."""
+    slug = os.path.basename(page_dir.rstrip(os.sep))
+    _, meta = render_markdown(essay_path(page_dir))
+    return {
+        "slug": slug,
+        "title": meta.get("title", [slug])[0],
+        "description": " ".join(meta.get("description", [])),
+    }
+
+
+def build_landing():
+    """Write pages/index.html: every model listed, one featured at random.
+
+    Every model is rendered as a featured card; the stylesheet shows only the
+    first and landing.js swaps in a random one, so the page degrades to a valid
+    (if fixed) choice without JavaScript.
+    """
+    with open(LANDING_TEMPLATE, encoding="utf-8") as fh:
+        template = fh.read()
+
+    models = [model_info(d) for d in model_dirs()]
+    if not models:
+        raise SystemExit("error: no models under pages/ to build a landing from")
+
+    featured = "\n".join(
+        f'      <article class="featured-item" data-slug="{m["slug"]}">\n'
+        f'        <a href="{m["slug"]}/">\n'
+        f'          <h2>{html_mod.escape(m["title"])}</h2>\n'
+        f'          <p>{html_mod.escape(m["description"])}</p>\n'
+        f'          <span class="cta">Abrir el modelo &rarr;</span>\n'
+        f"        </a>\n"
+        f"      </article>"
+        for m in models
+    )
+    listing = "\n".join(
+        f"        <li>\n"
+        f'          <a href="{m["slug"]}/">\n'
+        f'            <span class="name">{html_mod.escape(m["title"])}</span>\n'
+        f'            <span class="blurb">{html_mod.escape(m["description"])}</span>\n'
+        f"          </a>\n"
+        f"        </li>"
+        for m in models
+    )
+
+    page = template.replace("{featured}", featured).replace("{models}", listing)
+    out_path = os.path.join(PAGES_DIR, "index.html")
+    with open(out_path, "w", encoding="utf-8") as fh:
+        fh.write(page)
+    print(f"built {os.path.relpath(out_path, ROOT)} ({len(models)} models)")
+
+
 def main(argv):
     with open(TEMPLATE, encoding="utf-8") as fh:
         template = fh.read()
 
-    if argv:
-        dirs = [os.path.join(PAGES_DIR, name) for name in argv]
-    else:
-        dirs = [
-            os.path.join(PAGES_DIR, name)
-            for name in sorted(os.listdir(PAGES_DIR))
-            if os.path.isdir(os.path.join(PAGES_DIR, name))
-        ]
+    dirs = [os.path.join(PAGES_DIR, name) for name in argv] if argv else model_dirs()
 
     for page_dir in dirs:
         if not os.path.isdir(page_dir):
             raise SystemExit(f"error: not a folder: {page_dir}")
         build_page(page_dir, template)
+
+    # The landing lists every model, so it is rebuilt even for a single-model run.
+    build_landing()
 
 
 if __name__ == "__main__":

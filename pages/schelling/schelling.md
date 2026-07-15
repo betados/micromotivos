@@ -1,4 +1,5 @@
 title: Segregación sin segregacionistas
+description: Una sociedad tolerante puede segregarse sola. Simula el modelo de Schelling y comprueba cómo preferencias mínimas acaban separando la cuadrícula.
 lang: es
 css: schelling.css
 js: schelling.js

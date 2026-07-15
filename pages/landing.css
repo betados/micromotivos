@@ -1,0 +1,150 @@
+:root {
+  --bg: #fafafa;
+  --fg: #1c1c1c;
+  --muted: #5c5c5c;
+  --line: #e2e2e2;
+  --accent: #2f6fdb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.landing {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 4rem 1.25rem 6rem;
+}
+
+.landing header {
+  margin-bottom: 3rem;
+}
+
+.landing h1 {
+  margin: 0 0 0.5rem;
+  font-size: 2.5rem;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  margin: 0;
+  max-width: 32rem;
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+/* Only the first card shows without JS; landing.js picks one at random. */
+.featured-item + .featured-item {
+  display: none;
+}
+
+.featured-item a {
+  display: block;
+  padding: 1.75rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.featured-item a:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.featured-item h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+}
+
+.featured-item p {
+  margin: 0 0 1rem;
+  color: var(--muted);
+}
+
+.cta {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.all {
+  margin-top: 3.5rem;
+}
+
+.all h2 {
+  margin: 0 0 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.model-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.model-list li {
+  border-bottom: 1px solid var(--line);
+}
+
+.model-list a {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0.9rem 0.25rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.model-list a:hover {
+  color: var(--accent);
+}
+
+.model-list .name {
+  font-weight: 600;
+}
+
+.model-list .blurb {
+  flex: 1 1 auto;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 34rem) {
+  .landing {
+    padding-top: 2.5rem;
+  }
+
+  .landing h1 {
+    font-size: 2rem;
+  }
+
+  .model-list a {
+    display: block;
+  }
+
+  .model-list .blurb {
+    text-align: left;
+    white-space: normal;
+  }
+}

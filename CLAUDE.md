@@ -27,8 +27,13 @@ to *serve* the site, only to *regenerate* pages after edits.
 
 - `build.py` — the generator; its module docstring documents front-matter and
   the `{{placeholder}}` → `name.embed.html` mechanism.
+- `pages/` — **the published web root**, not the repo root. Deployed to Cloudflare
+  Pages with output dir `pages` and no build command, so `pages/index.html` serves
+  at `/` and `pages/schelling/index.html` at `/schelling/`. Preview it the same way:
+  `cd pages && ../.venv/bin/python -m http.server`.
 - `pages/<model>/` — self-contained: essay, widget fragment(s), css, js, and the
   generated `index.html`. Assets are colocated and linked by bare name.
-- `templates/page.html` — shared outer HTML shell.
-- Root `index.html` — still the original standalone Schelling app (a duplicate
-  of `pages/schelling/`); the intended next step is to make it a landing page.
+- `pages/index.html` — GENERATED landing, from `templates/landing.html` +
+  every model's `title`/`description` front-matter. Rebuilt on every `build.py`
+  run, including single-model runs, because it lists all models.
+- `templates/page.html`, `templates/landing.html` — the two outer HTML shells.
