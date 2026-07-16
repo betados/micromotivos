@@ -1,0 +1,34 @@
+<div class="layout">
+  <section class="board">
+    <canvas id="grid-place" width="500" height="500"></canvas>
+    <div class="stats">
+      <span>Paso: <strong id="place-step">0</strong></span>
+      <span>Felices: <strong id="place-happy">0%</strong></span>
+      <span id="place-status">Listo</span>
+    </div>
+    <p class="hint">Haz clic en un barrio que no le corresponde para dejar caer
+    un vecino del grupo contrario. Se queda ahí: acaba de mudarse y no piensa
+    moverse otra vez. A uno solo lo toleran… pero suelta unos cuantos en la
+    misma zona y observa cuándo el vecindario salta.</p>
+  </section>
+
+  <section class="panel">
+    <div class="control">
+      <label for="place-tolerance">Similitud deseada: <span id="place-tolerance-val">70%</span></label>
+      <input type="range" id="place-tolerance" min="25" max="70" step="5" value="70">
+      <small>Cuanta más similitud exigen los vecinos, antes saltan ante los
+      recién llegados: con la barra alta, un puñado en el mismo barrio basta para
+      desatar la desbandada. Más baja, y la zona absorbe muchos más antes de
+      saltar.</small>
+    </div>
+
+    <div class="control">
+      <label for="place-speed">Velocidad: <span id="place-speed-val">Media</span></label>
+      <input type="range" id="place-speed" min="0" max="500" step="25" value="120">
+    </div>
+
+    <div class="buttons">
+      <button id="place-resettle" class="primary">Reasentar</button>
+    </div>
+  </section>
+</div>

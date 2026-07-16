@@ -40,7 +40,7 @@ siempre tendrán que gastar energía en vigilar a su nuevo socio. ¿Merecerá la
 
 {{playa_interactiva}}
 
-¿Que pasaría si llegasen más vendedores a la playa? ¿Habrá equilibrio? ¿Será este equilibrio lo mejor para los bañistas?
+¿Qué pasaría si llegasen más vendedores a la playa? ¿Habrá equilibrio? ¿Será este equilibrio lo mejor para los bañistas?
 
 {{playa_int_varios}}
 
