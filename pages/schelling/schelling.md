@@ -3,7 +3,7 @@ description: Una sociedad tolerante puede segregarse sola. Simula el modelo de S
 lang: es
 css: schelling.css
 js: schelling.js
-js: schelling_placeable.js
+//js: schelling_placeable.js
 
 # Segregación sin segregacionistas
 
@@ -29,6 +29,6 @@ genera una cascada de mudanzas. El único equilibrio estable acaba siendo la seg
 pesar de ser una sociedad tolerante. 
 No en vano Schelling tituló su libro *Micromotivos y macrocomportamiento*
 
-¿Qué pasaría si una vez alcanzado el equilibrio un vecino decide mudarse a un barrio que no le corresponde?
+//¿Qué pasaría si una vez alcanzado el equilibrio un vecino decide mudarse a un barrio que no le corresponde?
 
-{{schelling_placeable}}
+//{{schelling_placeable}}
