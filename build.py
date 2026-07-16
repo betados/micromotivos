@@ -27,6 +27,13 @@ directly (`schelling.css`); a shared asset is a path out of the folder
 (`../../css/base.css`). The pages work when opened directly from disk and need
 no build step to *serve* — only to regenerate.
 
+Comments: a line whose first non-blank characters are `//` is a comment and is
+dropped before anything else parses it — in the front-matter and the body alike.
+Use it to stage content without shipping it: comment a widget's `{{token}}` line
+and its `js:` line and neither reaches the page. Full-line only (`//` inside a
+URL like `https://` is never treated as a comment); to comment a multi-line
+block, prefix each line.
+
 Usage:
     python3 build.py            # build every model under pages/, then the landing
     python3 build.py schelling  # build just one model, then the landing
@@ -46,6 +53,22 @@ LANDING_TEMPLATE = os.path.join(ROOT, "templates", "landing.html")
 
 # {{token}}, optionally wrapped in the <p> markdown puts around a lone line.
 TOKEN_RE = re.compile(r"(?:<p>\s*)?\{\{\s*([\w.-]+)\s*\}\}(?:\s*</p>)?")
+
+
+def strip_comments(text):
+    """Drop full-line `//` comments (first non-blank chars are `//`).
+
+    Runs on the raw source before front-matter and markdown parsing, so a
+    comment works anywhere — a `js:` line or a `{{token}}` line alike. The whole
+    line is removed (newline included) so the front-matter block stays
+    contiguous and its parser doesn't stop early. Only whole lines are treated
+    as comments, so `//` inside a URL (`https://…`) is left untouched.
+    """
+    return "".join(
+        line
+        for line in text.splitlines(keepends=True)
+        if not line.lstrip().startswith("//")
+    )
 
 
 def essay_path(page_dir):
@@ -74,6 +97,7 @@ def render_markdown(md_path):
     """Return (html_body, meta) for a markdown file with front-matter."""
     with open(md_path, encoding="utf-8") as fh:
         text = fh.read()
+    text = strip_comments(text)
     md = markdown.Markdown(extensions=["meta", "attr_list", "tables"])
     html = md.convert(text)
     # md.Meta maps each key to a list of strings.
