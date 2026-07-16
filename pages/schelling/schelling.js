@@ -5,10 +5,11 @@
   // Cell states
   var EMPTY = 0, BLUE = 1, ORANGE = 2;
 
+  // Must match --empty/--blue/--orange in schelling.css.
   var COLORS = {};
-  COLORS[EMPTY] = '#f2f2f2';
-  COLORS[BLUE] = '#2f6fed';
-  COLORS[ORANGE] = '#f08a24';
+  COLORS[EMPTY] = '#ffffff';
+  COLORS[BLUE] = '#9dc0ee';
+  COLORS[ORANGE] = '#f2bd84';
 
   var canvas = document.getElementById('grid');
   var ctx = canvas.getContext('2d');
@@ -178,7 +179,7 @@
     var result = doStep();
     if (result.moved === 0) {
       stop();
-      updateStats(result.happy, 'Settled — everyone is happy');
+      updateStats(result.happy, 'Estable — todos felices');
       return;
     }
     var delay = parseInt(speedInput.value, 10);
@@ -187,15 +188,15 @@
 
   function start() {
     if (isRunning()) return;
-    updateStats(currentHappy(), 'Running…');
+    updateStats(currentHappy(), 'Ejecutando…');
     timer = setTimeout(loop, 0);
-    runBtn.textContent = 'Pause';
+    runBtn.textContent = 'Pausar';
     runBtn.classList.remove('primary');
   }
 
   function stop() {
     if (timer !== null) { clearTimeout(timer); timer = null; }
-    runBtn.textContent = 'Run';
+    runBtn.textContent = 'Ejecutar';
     runBtn.classList.add('primary');
   }
 
@@ -204,7 +205,7 @@
     initGrid();
     fitCanvas();
     draw();
-    updateStats(currentHappy(), 'Ready');
+    updateStats(currentHappy(), 'Listo');
   }
 
   // ---------------------------------------------------------------------------
@@ -212,14 +213,14 @@
   // ---------------------------------------------------------------------------
 
   runBtn.addEventListener('click', function () {
-    if (isRunning()) { stop(); updateStats(currentHappy(), 'Paused'); }
+    if (isRunning()) { stop(); updateStats(currentHappy(), 'En pausa'); }
     else start();
   });
 
   stepBtn.addEventListener('click', function () {
     if (isRunning()) return;
     var result = doStep();
-    updateStats(result.happy, result.moved === 0 ? 'Settled — everyone is happy' : 'Stepped');
+    updateStats(result.happy, result.moved === 0 ? 'Estable — todos felices' : 'Paso completado');
   });
 
   resetBtn.addEventListener('click', reset);
@@ -232,7 +233,7 @@
     el('empty-val').textContent = emptyInput.value + '%';
     el('ratio-val').textContent = ratioInput.value + ' / ' + (100 - parseInt(ratioInput.value, 10));
     var s = parseInt(speedInput.value, 10);
-    el('speed-val').textContent = s <= 40 ? 'Fast' : s <= 150 ? 'Medium' : 'Slow';
+    el('speed-val').textContent = s <= 40 ? 'Rápida' : s <= 150 ? 'Media' : 'Lenta';
   }
 
   [sizeInput, emptyInput, ratioInput].forEach(function (input) {

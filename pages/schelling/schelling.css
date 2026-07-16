@@ -1,7 +1,12 @@
 :root {
-  --blue: #2f6fed;
-  --orange: #f08a24;
-  --empty: #f2f2f2;
+  /* Complementary pastels (blue ~255deg / apricot ~65deg on the OKLCH wheel).
+     Kept in sync with COLORS in schelling.js — the canvas can't read CSS vars.
+     Steps chosen so all three cell states stay >=17 OKLab dE apart in normal
+     vision and >=15 under simulated protanopia/deuteranopia; empty is pure
+     white, which is what holds the two pastels apart from the vacant cells. */
+  --blue: #9dc0ee;
+  --orange: #f2bd84;
+  --empty: #ffffff;
   --bg: #fafafa;
   --panel: #ffffff;
   --ink: #222;
@@ -122,10 +127,10 @@ button:hover { background: #f4f4f4; }
 button.primary {
   background: var(--blue);
   border-color: var(--blue);
-  color: #fff;
+  color: var(--ink); /* ink, not white: white on pastel blue is 1.9:1 */
 }
 
-button.primary:hover { background: #245ad0; }
+button.primary:hover { background: #8ab3e8; }
 
 footer {
   margin-top: 32px;

@@ -20,7 +20,7 @@
     <p>Esto se preguntaba en 1969 Thomas C. Schelling. </p>
     <p>Su hipótesis es que las socidades, como buenos sistemas complejos, pueden dar lugar a dinámicas emergentes complejas a 
     raiz de microdecisiones casi inconscientes de sus individuos. 
-    Aunque la sociedad no sufra de un racismo total si puede ocurrir que a alguien no le guste ser el único de su raza 
+    Aunque la sociedad sea tolerante si puede ocurrir que a alguien no le guste ser el único de su raza 
     en el barrio. Puede que no le importe incluso estar en minoría, pero siempre suele haber algún umbral que de 
     cruzarse le haga estar incómodo. Es entonces cuando decide mudarse. Lo que empeora el problema para los de su raza 
     que se queden y provoca una cascada que empuja al resto a mudarse también. El único equilibrio estable acaba siendo 
@@ -33,42 +33,42 @@
       <section class="board">
         <canvas id="grid" width="500" height="500"></canvas>
         <div class="stats">
-          <span>Step: <strong id="stat-step">0</strong></span>
-          <span>Happy: <strong id="stat-happy">0%</strong></span>
-          <span id="stat-status">Ready</span>
+          <span>Paso: <strong id="stat-step">0</strong></span>
+          <span>Felices: <strong id="stat-happy">0%</strong></span>
+          <span id="stat-status">Listo</span>
         </div>
       </section>
 
       <section class="panel">
         <div class="control">
-          <label for="size">Grid size: <span id="size-val">50</span> &times; <span id="size-val2">50</span></label>
+          <label for="size">Tamaño de la cuadrícula: <span id="size-val">50</span> &times; <span id="size-val2">50</span></label>
           <input type="range" id="size" min="10" max="100" step="5" value="50">
         </div>
 
         <div class="control">
-          <label for="tolerance">Similarity wanted: <span id="tolerance-val">30%</span></label>
+          <label for="tolerance">Similitud deseada: <span id="tolerance-val">30%</span></label>
           <input type="range" id="tolerance" min="0" max="100" step="5" value="30">
-          <small>An agent is happy if at least this share of its neighbours match its group.</small>
+          <small>Un agente es feliz si al menos esta proporción de sus vecinos pertenece a su grupo.</small>
         </div>
 
         <div class="control">
-          <label for="empty">Empty cells: <span id="empty-val">10%</span></label>
+          <label for="empty">Cuadros vacíos: <span id="empty-val">10%</span></label>
           <input type="range" id="empty" min="2" max="40" step="1" value="10">
         </div>
 
         <div class="control">
-          <label for="ratio">Group balance (Blue / Orange): <span id="ratio-val">50 / 50</span></label>
+          <label for="ratio">Balance de grupos (Azul / Naranja): <span id="ratio-val">50 / 50</span></label>
           <input type="range" id="ratio" min="10" max="90" step="5" value="50">
         </div>
 
         <div class="buttons">
-          <button id="run" class="primary">Run</button>
-          <button id="step">Step</button>
-          <button id="reset">Reset</button>
+          <button id="run" class="primary">Ejecutar</button>
+          <button id="step">Avanzar</button>
+          <button id="reset">Reiniciar</button>
         </div>
 
         <div class="control">
-          <label for="speed">Speed: <span id="speed-val">Fast</span></label>
+          <label for="speed">Velocidad: <span id="speed-val">Rápida</span></label>
           <input type="range" id="speed" min="0" max="500" step="25" value="60">
         </div>
       </section>
