@@ -1,5 +1,5 @@
 title: Helado al lado
-description: Dos heladeros eligen sitio en la playa. ¿Será Lo mejor para los bañistas lo mejor para los heladeros? ¿Podrías tú ganar a tu rival?
+description: Dos heladeros eligen sitio en la playa. ¿Será lo mejor para los bañistas lo mejor para los heladeros? ¿Podrías tú ganar a tu rival?
 lang: es
 css: hotelling.css
 css: hotelling-n.css
@@ -44,10 +44,15 @@ siempre tendrán que gastar energía en vigilar a su nuevo socio. ¿Merecerá la
 
 {{playa_int_varios}}
 
-Veamos que ocurre cuando damos el salto a las dos dimensiones. Esto es un modelo más realista de como funciona una 
-ciudad y puede ayudar a explicar porqué a veces parece que comercios del mismo gremio se juntan en una misma ubicación 
+Veamos qué ocurre cuando damos el salto a las dos dimensiones. Esto es un modelo más realista de como funciona una 
+ciudad y puede ayudar a explicar por qué a veces parece que comercios del mismo gremio se juntan en una misma ubicación 
 de forma aparentemente irracional.
 
 {{playa_cuadrada}}
+
+//two parties in an election are the two 
+//ice-cream sellers. Median-voter convergence — why rival parties end up saying almost the same thing, back to back 
+//in the center of the beach — is the "aha" that turns a cute geometry story into a lens the reader applies the next 
+//time they watch a campaign
 
 *Este es el modelo de competencia espacial que Harold Hotelling formuló en 1929 en [«Stability in Competition»](https://www.jstor.org/stable/2224214).*
