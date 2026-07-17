@@ -49,3 +49,5 @@ ciudad y puede ayudar a explicar porqué a veces parece que comercios del mismo 
 de forma aparentemente irracional.
 
 {{playa_cuadrada}}
+
+*Este es el modelo de competencia espacial que Harold Hotelling formuló en 1929 en [«Stability in Competition»](https://www.jstor.org/stable/2224214).*

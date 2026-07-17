@@ -11,7 +11,7 @@ js: schelling.js
 ¿Es el urbanismo el causante? O 
 ¿Puede ser que sean el resultado agregado de las decisiones de ciudadanos individuales?
 
-Esto se preguntaba en 1969 Thomas C. Schelling. 
+Esto se preguntaba en 1969 [Thomas C. Schelling](https://www.jstor.org/stable/1823701). 
 
 Imagina un vecino cualquiera. No es racista: le da igual el color de sus vecinos y no le importa ser minoría en su calle. 
 Pero un día mira alrededor y se da cuenta de que es el único. Y eso, aunque le cueste admitirlo, 
