@@ -8,8 +8,8 @@ js: schelling.js
 # Segregación sin segregacionistas
 
 ¿Son los barrios segregados racialmente fruto de una decisión consciente? ¿De una planificación centralizada? 
-¿Es el urbanismo el causante? O 
-¿Puede ser que sean el resultado agregado de las decisiones de ciudadanos individuales?
+¿Es el urbanismo el causante? 
+¿O puede ser que sean el resultado agregado de las decisiones de ciudadanos individuales?
 
 Esto se preguntaba en 1969 [Thomas C. Schelling](https://www.jstor.org/stable/1823701). 
 
@@ -27,7 +27,7 @@ muy ligeras la cuadrícula se segrega de forma vehemente.
 Un vecino, luego otro. Cada vecino que se muda hace que la situación empeore para los suyos que quedan atrás y esto 
 genera una cascada de mudanzas. El único equilibrio estable acaba siendo la segregación total a 
 pesar de ser una sociedad tolerante. 
-No en vano Schelling tituló su libro *Micromotivos y macrocomportamiento*
+No en vano Schelling tituló su libro *Micromotivos y macrocomportamiento*.
 
 //¿Qué pasaría si una vez alcanzado el equilibrio un vecino decide mudarse a un barrio que no le corresponde?
 

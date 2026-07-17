@@ -18,18 +18,18 @@ para poder comprar un helado.
 {{playa_1}}
 
 Esta distribución, ideal teóricamente, tiene un peligro. Nada impide que un heladero listillo se acerque 
-ligeramente al centro. De esta forma le robaría los clientes más proximos al centro a su competidor. 
+ligeramente al centro. De esta forma le robaría los clientes más próximos al centro a su competidor. 
 
 {{playa_2}}
 
 Al otro no se le 
-había ocurrido, pero no es tonto, por lo que se acerca el centro en la misma medida mas un extra por si la vista le 
+había ocurrido, pero no es tonto, por lo que se acerca al centro en la misma medida más un extra por si la vista le 
 está fallando, no vaya a ser. El primero aprovecha que el segundo está despachando unos helados para ganar otro poquito 
 de terreno y el ciclo vuelve a empezar hasta que finalmente se encuentran espalda con espalda en la mitad de la playa.
 
 {{playa_3}}
 
-Se han quedado igual, repartiendose los clientes al 50%, pero ha empeorado su servicio pues los bañistas de los 
+Se han quedado igual, repartiéndose los clientes al 50%, pero ha empeorado su servicio pues los bañistas de los 
 extremos ahora han
 de recorrer la mitad de la playa. De hecho puede que estén peor porque esa lontananza puede disuadir a alguno de los 
 menos apetentes. Ninguno de los heladeros se va a mover pues sería regalarle terreno a su competidor. 
@@ -44,15 +44,15 @@ siempre tendrán que gastar energía en vigilar a su nuevo socio. ¿Merecerá la
 
 {{playa_int_varios}}
 
-Veamos qué ocurre cuando damos el salto a las dos dimensiones. Esto es un modelo más realista de como funciona una 
+Veamos qué ocurre cuando damos el salto a las dos dimensiones. Esto es un modelo más realista de cómo funciona una 
 ciudad y puede ayudar a explicar por qué a veces parece que comercios del mismo gremio se juntan en una misma ubicación 
 de forma aparentemente irracional.
 
 {{playa_cuadrada}}
 
 
-Este fenómeno aparece también en otros campos. En la política, por ejemplo. Y podría explicar porqué en sistemas 
-bipartidistas (o casi) los partidos acaban convergiendo en el centro y haciéndose indistiguibles salvo en cosas cosméticas. 
+Este fenómeno aparece también en otros campos. En la política, por ejemplo. Y podría explicar por qué en sistemas 
+bipartidistas (o casi) los partidos acaban convergiendo en el centro y haciéndose indistinguibles salvo en cosas cosméticas. 
 Cualquier desplazamiento hacia un extremo del espectro político dejaría el centro libre para ser atacado por su rival. 
 
 *Este es el modelo de competencia espacial que Harold Hotelling formuló en 1929 en [«Stability in Competition»](https://www.jstor.org/stable/2224214).*
