@@ -50,9 +50,9 @@ de forma aparentemente irracional.
 
 {{playa_cuadrada}}
 
-//two parties in an election are the two 
-//ice-cream sellers. Median-voter convergence — why rival parties end up saying almost the same thing, back to back 
-//in the center of the beach — is the "aha" that turns a cute geometry story into a lens the reader applies the next 
-//time they watch a campaign
+
+Este fenómeno aparece también en otros campos. En la política, por ejemplo. Y podría explicar porqué en sistemas 
+bipartidistas (o casi) los partidos acaban convergiendo en el centro y haciéndose indistiguibles salvo en cosas cosméticas. 
+Cualquier desplazamiento hacia un extremo del expectro político dejaría el centro libre para ser atacado por su rival. 
 
 *Este es el modelo de competencia espacial que Harold Hotelling formuló en 1929 en [«Stability in Competition»](https://www.jstor.org/stable/2224214).*
