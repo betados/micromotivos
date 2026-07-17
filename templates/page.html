@@ -8,9 +8,24 @@
 {description}
 {styles}
   <meta name="theme-color" content="#fafafa">
+  <style>
+    /* Return-to-landing link, shared by every model page — this template is the
+       one place it lives. Colours are hard-coded rather than read from CSS
+       variables so it never depends on a particular model's stylesheet. */
+    .site-nav {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 16px 20px 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    .site-nav a { color: #666; text-decoration: none; font-size: 0.9rem; }
+    .site-nav a:hover { color: #222; text-decoration: underline; }
+  </style>
 </head>
 
 <body>
+
+  <nav class="site-nav"><a href="../">&larr; micromotivos</a></nav>
 
   <main class="app">
 {content}
