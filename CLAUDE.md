@@ -28,9 +28,11 @@ to *serve* the site, only to *regenerate* pages after edits.
 - `build.py` — the generator; its module docstring documents front-matter and
   the `{{placeholder}}` → `name.embed.html` mechanism.
 - `pages/` — **the published web root**, not the repo root. Deployed to Cloudflare
-  Pages with output dir `pages` and no build command, so `pages/index.html` serves
-  at `/` and `pages/schelling/index.html` at `/schelling/`. Preview it the same way:
-  `cd pages && ../.venv/bin/python -m http.server`.
+  Pages with output dir `pages` and build command
+  `pip install -r requirements.txt && python build.py` — the generated
+  `index.html` files are gitignored, so production regenerates them. Served as
+  `pages/index.html` → `/`, `pages/schelling/index.html` → `/schelling/`.
+  Preview it the same way: `cd pages && ../.venv/bin/python -m http.server`.
 - `pages/<model>/` — self-contained: essay, widget fragment(s), css, js, and the
   generated `index.html`. Assets are colocated and linked by bare name.
 - `pages/index.html` — GENERATED landing, from `templates/landing.html` +

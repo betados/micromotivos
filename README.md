@@ -15,7 +15,7 @@ templates/
   page.html                  # shared shell for a model page
   landing.html               # shared shell for the landing page
 pages/                       # THE SITE ROOT in production
-  index.html                 # GENERATED — the landing page
+  index.html                 # GENERATED (gitignored) — the landing page
   landing.css                # the landing's styles
   landing.js                 # picks the featured model at random
   schelling/                 # one folder per model, self-contained
@@ -23,7 +23,7 @@ pages/                       # THE SITE ROOT in production
     schelling.embed.html     # a widget fragment (HTML markup only)
     schelling.css            # this model's styles
     schelling.js             # this model's behaviour
-    index.html               # GENERATED — do not edit by hand
+    index.html               # GENERATED (gitignored) — do not edit by hand
 ```
 
 Everything a model needs lives in its own folder under `pages/`, so models stay
@@ -116,6 +116,14 @@ Markdown wraps around a placeholder sitting on its own line, so the widget is
 injected as a clean block. Use several placeholders in one essay to embed
 several widgets.
 
+### Comments
+
+A line whose first non-blank characters are `//` is dropped before anything is
+parsed — front-matter and body alike. Use it to stage content without shipping
+it: comment out a widget's `{{name}}` line *and* its `js:` line and neither
+reaches the page. Full-line only, so a `//` inside a URL is never a comment; to
+silence a block, prefix every line.
+
 ## The landing page
 
 `pages/index.html` is generated from `templates/landing.html` and lists every
@@ -127,20 +135,22 @@ JavaScript off. Edit `templates/landing.html` for the copy, not `pages/index.htm
 ## Deploying
 
 The site is published with **`pages/` as the web root**, which is what gives the
-clean `domain/schelling/` URLs. The generated HTML is committed, so no build step
-runs in production.
+clean `domain/schelling/` URLs. The generated `index.html` files are gitignored,
+so production has to run the generator itself.
 
-**Cloudflare Pages** (current target): connect the repo, leave the build command
-empty, set the output directory to `pages`. Add the custom domain in the project's
-*Custom domains* tab; if the domain is registered with Cloudflare, DNS is wired up
-automatically.
+**Cloudflare Pages** (current target): connect the repo, set the build command to
+`pip install -r requirements.txt && python build.py` and the output directory to
+`pages`. The repo's `.python-version` pins the build's Python (3.12) to match
+local development. Add the custom domain in the project's *Custom domains* tab;
+if the domain is registered with Cloudflare, DNS is wired up automatically.
 
 Note that GitHub Pages *cannot* serve this layout as-is: deploying from a branch
-only offers `/` or `/docs` as the publish folder, never `/pages`. Moving there
-would mean renaming `pages/` → `docs/` (and updating `PAGES_DIR` in `build.py`),
-or adding an Actions workflow that uploads `pages/` as the artifact.
+only offers `/` or `/docs` as the publish folder, never `/pages` — and the site
+needs a build now anyway. Moving there would mean an Actions workflow that runs
+`build.py` and uploads `pages/` as the artifact.
 
 ## Notes
 
-- `.venv/`, `.idea/` and `.claude/` are gitignored. The generated `index.html`
-  files are committed, so the site serves as-is with no build step.
+- `.venv/`, `.idea/` and `.claude/` are gitignored — and so are the generated
+  `index.html` files: rebuild locally to preview, and production regenerates
+  them at deploy time.
