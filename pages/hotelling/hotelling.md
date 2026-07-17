@@ -53,6 +53,6 @@ de forma aparentemente irracional.
 
 Este fenómeno aparece también en otros campos. En la política, por ejemplo. Y podría explicar porqué en sistemas 
 bipartidistas (o casi) los partidos acaban convergiendo en el centro y haciéndose indistiguibles salvo en cosas cosméticas. 
-Cualquier desplazamiento hacia un extremo del expectro político dejaría el centro libre para ser atacado por su rival. 
+Cualquier desplazamiento hacia un extremo del espectro político dejaría el centro libre para ser atacado por su rival. 
 
 *Este es el modelo de competencia espacial que Harold Hotelling formuló en 1929 en [«Stability in Competition»](https://www.jstor.org/stable/2224214).*
