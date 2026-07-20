@@ -33,6 +33,17 @@ body {
   letter-spacing: -0.02em;
 }
 
+.twitter-link {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 0.5rem;
+  color: var(--muted);
+}
+
+.twitter-link:hover {
+  color: var(--accent);
+}
+
 .tagline {
   margin: 0;
   max-width: 32rem;
