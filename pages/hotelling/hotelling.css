@@ -35,8 +35,8 @@ p {
 
 /* --- The two static schemas ------------------------------------------- */
 
+/* Figure margins and figcaption styling come from templates/page.html. */
 .beach-figure {
-  margin: 28px 0;
   padding: 8px 0 0;
 }
 
@@ -127,13 +127,6 @@ p {
   fill: var(--ink);
   font-weight: 600;
   font-family: inherit;
-}
-
-.beach-figure figcaption {
-  margin-top: 6px;
-  color: var(--muted);
-  font-size: 0.85rem;
-  max-width: 62ch;
 }
 
 /* --- The game --------------------------------------------------------- */

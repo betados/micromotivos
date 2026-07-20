@@ -20,6 +20,22 @@
     }
     .site-nav a { color: #666; text-decoration: none; font-size: 0.9rem; }
     .site-nav a:hover { color: #222; text-decoration: underline; }
+
+    /* Figure captions, shared by every model. Italic + a bottom margin larger
+       than the top one (caption must sit closer to its image than to the
+       paragraph that follows) — both keep captions distinguishable from body
+       text on small screens. */
+    .app figure {
+      margin: 28px 0 40px;
+    }
+    .app figcaption {
+      margin: 6px auto 0;
+      color: #666;
+      font-size: 0.85rem;
+      font-style: italic;
+      max-width: 62ch;
+      text-align: center;
+    }
   </style>
 </head>
 
