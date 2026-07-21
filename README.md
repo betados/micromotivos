@@ -132,6 +132,17 @@ first and `landing.js` swaps in a random one on load — so the featured model
 varies per visit, and the page still degrades to a valid (if fixed) choice with
 JavaScript off. Edit `templates/landing.html` for the copy, not `pages/index.html`.
 
+## Social previews
+
+Every page carries Open Graph / Twitter Card meta tags: `build.py` emits them
+for model pages from `title`/`description` (absolute URLs come from its
+`SITE_URL` constant), and `templates/landing.html` carries the landing's
+statically. All pages share the card image `pages/card.png` (1200×630), a
+committed asset drawn by `make_card.py` — rerun it only to change the card
+(`./.venv/bin/pip install pillow`, then `./.venv/bin/python make_card.py`);
+Pillow is deliberately not in `requirements.txt` since production never draws
+the card.
+
 ## Deploying
 
 The site is published with **`pages/` as the web root**, which is what gives the

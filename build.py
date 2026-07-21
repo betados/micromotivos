@@ -17,6 +17,11 @@ Front-matter keys (all optional except `title`):
 
     title:        page <title> and browser tab
     description:  <meta name="description"> and the model's blurb on the landing
+
+`title`/`description` also feed the social-preview (Open Graph / Twitter Card)
+meta tags every page gets; all pages share the card image `pages/card.png`
+(a committed asset; regenerate with make_card.py — see README). Absolute URLs
+in those tags come from SITE_URL below.
     lang:         <html lang="…">              (default: en)
     css:          stylesheet to link           (may be repeated)
     js:           script to link               (may be repeated)
@@ -47,6 +52,9 @@ import sys
 import markdown
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
+# Production origin, used only for absolute URLs in social-preview meta tags
+# (og:url, og:image); every other link on the site stays relative.
+SITE_URL = "https://micromotivos.com"
 PAGES_DIR = os.path.join(ROOT, "pages")
 TEMPLATE = os.path.join(ROOT, "templates", "page.html")
 LANDING_TEMPLATE = os.path.join(ROOT, "templates", "landing.html")
@@ -141,6 +149,31 @@ def asset_tags(meta):
     return styles, scripts
 
 
+def head_meta(title, description, url):
+    """Description + social-preview (Open Graph / Twitter Card) meta tags.
+
+    All pages share the site-wide card image `pages/card.png`; the landing
+    carries the equivalent tags statically in its template.
+    """
+    esc = lambda s: html_mod.escape(s, quote=True)
+    tags = []
+    if description:
+        tags.append(f'<meta name="description" content="{esc(description)}">')
+        tags.append(f'<meta property="og:description" content="{esc(description)}">')
+    tags += [
+        '<meta property="og:site_name" content="micromotivos">',
+        '<meta property="og:type" content="website">',
+        f'<meta property="og:title" content="{esc(title)}">',
+        f'<meta property="og:url" content="{url}">',
+        f'<meta property="og:image" content="{SITE_URL}/card.png">',
+        '<meta property="og:image:width" content="1200">',
+        '<meta property="og:image:height" content="630">',
+        '<meta name="twitter:card" content="summary_large_image">',
+        '<meta name="twitter:site" content="@micromotivos">',
+    ]
+    return "\n".join("  " + t for t in tags)
+
+
 def indent(block, spaces):
     pad = " " * spaces
     return "\n".join(pad + line if line else line for line in block.splitlines())
@@ -159,17 +192,13 @@ def build_page(page_dir, template):
     title = meta.get("title", [model])[0]
     lang = meta.get("lang", ["en"])[0]
     description = " ".join(meta.get("description", []))
-    description_tag = (
-        f'  <meta name="description" content="{html_mod.escape(description, quote=True)}">'
-        if description
-        else ""
-    )
+    meta_tags = head_meta(title, description, f"{SITE_URL}/{model}/")
 
     page = (
         template
         .replace("{lang}", lang)
         .replace("{title}", title)
-        .replace("{description}", description_tag)
+        .replace("{meta}", meta_tags)
         .replace("{styles}", styles)
         .replace("{scripts}", scripts)
         .replace("{content}", indent(html, 4))
