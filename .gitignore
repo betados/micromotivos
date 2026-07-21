@@ -7,3 +7,10 @@ __pycache__/
 # Regenerate with build.py; never hand-edit. Serving requires a build step now.
 pages/index.html
 pages/*/index.html
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
