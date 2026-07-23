@@ -1,12 +1,13 @@
 :root {
-  /* Speed ramp: stopped -> red, apricot at half the equilibrium speed, green
-     at the equilibrium, blue past it (escaping a jam) up to the speed limit.
-     Kept in sync with RED/AMBER/GREEN/BLUE in nagel.js — the canvas can't
-     read CSS vars. */
-  --red: #e67a72;
-  --amber: #f2bd84;
-  --green: #7fbf8a;
-  --blue: #2f6fed; /* hotelling's blue: the escape end wants to shout */
+  /* Speed ramp: stopped -> red, amber at half the equilibrium speed, green at
+     the equilibrium, blue past it (escaping a jam). One OKLCH sweep at fixed
+     L=0.70 and C=0.150, hue 29/70/145/264 — only the hue moves, so every stop
+     carries the same weight. Kept in sync with RED/AMBER/GREEN/BLUE in
+     nagel.js — the canvas can't read CSS vars. */
+  --red: #ed7666;
+  --amber: #d98b09;
+  --green: #5bb661;
+  --blue: #6e9bfb;
 
   /* UI accent, deliberately separate from the ramp above: the controls are
      chrome and should stay quiet when the ramp colours change. */

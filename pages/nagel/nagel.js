@@ -10,13 +10,16 @@
 (function () {
   'use strict';
 
-  // Speed ramp, must match --red/--amber/--green in nagel.css. Interpolating
-  // red straight to green goes through a muddy olive, so the site's apricot
-  // sits in the middle as a third stop.
-  var RED = { r: 230, g: 122, b: 114 };   // stopped
-  var AMBER = { r: 242, g: 189, b: 132 }; // half speed
-  var GREEN = { r: 127, g: 191, b: 138 }; // as fast as this density allows
-  var BLUE = { r: 47, g: 111, b: 237 };   // past it: escaping a jam
+  // Speed ramp, must match --red/--amber/--green/--blue in nagel.css. The four
+  // stops are one OKLCH sweep at fixed lightness 0.70 and fixed chroma 0.150,
+  // hue 29/70/145/264 — only the hue moves, so no stop reads louder or dimmer
+  // than the others and the ring has no bright or dark hotspots. Amber is the
+  // midpoint because red interpolated straight to green passes through a muddy
+  // olive. Recompute the whole set together if any of it changes.
+  var RED = { r: 237, g: 118, b: 102 };   // stopped
+  var AMBER = { r: 217, g: 139, b: 9 };   // half the equilibrium speed
+  var GREEN = { r: 91, g: 182, b: 97 };   // as fast as this density allows
+  var BLUE = { r: 110, g: 155, b: 251 };  // past it: escaping a jam
 
   // --- Physics constants (SI units) ---
   var L = 600;          // ring circumference, m
@@ -29,8 +32,8 @@
   var BRAKE_HOLD = 1.5; // a forced frenazo pins the car for this long, s
   var ESCAPE_SPAN = 0.5; // full blue at this much above the equilibrium speed
 
-  // The step length is measured from the frame clock, so the traffic moves at
-  // the same rate on any display instead of tracking the refresh rate.
+  // The step length is measured from the frame clock, so the traffic advances
+  // at the same rate on any display.
   var TIME_SCALE = 3;   // simulated seconds per wall-clock second
   var DT_MAX = 0.1;     // never integrate a longer step than this, s
   var ST_ROW = 0.15;    // simulated seconds between space-time rows
@@ -148,23 +151,20 @@
   // Rendering
   // ---------------------------------------------------------------------------
 
-  // The reference is what this density allows, not the fastest car on the
-  // road: a moving reference would restain every car on the ring whenever one
-  // of them accelerated out of a jam, a speed change that never happened.
-  // Referencing the speed limit instead would wash the ring red whenever the
-  // traffic is too dense to ever reach it.
+  // Speeds are measured against freeSpeed(), which holds still while the
+  // traffic moves: a car's colour therefore changes only when that car's own
+  // speed does, and the ramp spans the range of speeds this density actually
+  // produces.
   function speedColor(v) {
     var ref = freeSpeed();
     var a, b_, t;
     if (v > ref) {
       // Above the equilibrium — a car flooring it into the gap a jam leaves
-      // behind. The span is ESCAPE_SPAN above the equilibrium rather than all
-      // the way to the speed limit: cars escaping a queue overshoot by about
-      // half the equilibrium speed and never get near the limit, so scaling
-      // to the limit left every car within a hair of pure green. Still capped
-      // by the limit, so on a road empty enough that the limit *is* the
-      // equilibrium there is no headroom and nothing turns blue — correct,
-      // since with no queue to escape there is nothing to mark.
+      // behind. Blue saturates ESCAPE_SPAN above the equilibrium, roughly the
+      // most a car gains while escaping a queue. The span is also capped by
+      // the speed limit, so on a road empty enough that the limit *is* the
+      // equilibrium there is no headroom and nothing turns blue: with no
+      // queue to escape there is nothing to mark.
       var head = Math.min(vmaxMs() - ref, ref * ESCAPE_SPAN);
       a = GREEN; b_ = BLUE;
       t = head > 0.1 ? Math.min(1, (v - ref) / head) : 0;
@@ -200,7 +200,7 @@
     roadCtx.stroke();
 
     // Cars: small tangent rectangles, slightly longer than to scale so they
-    // stay visible; colour runs stopped-orange -> vmax-blue.
+    // stay visible; colour comes from the speed ramp.
     var carPx = Math.max(9, CAR_LEN / L * 2 * Math.PI * R);
     for (var i = 0; i < xs.length; i++) {
       var a = angleOf(xs[i]);
@@ -219,7 +219,8 @@
     }
   }
 
-  // One pixel row per few steps; old rows scroll up, time flows downward.
+  // One pixel row per ST_ROW of simulated time; old rows scroll up, so time
+  // flows downward.
   function drawSpacetimeRow() {
     var w = stCanvas.width, h = stCanvas.height;
     stCtx.drawImage(stCanvas, 0, -1);
@@ -299,10 +300,10 @@
   var statAccum = 0;
 
   function frame(now) {
-    // Advance by the wall-clock time since the last frame, capped: a
-    // backgrounded tab or a long pause would otherwise hand us a step big
-    // enough to fling cars through the ones ahead. Under heavy load the
-    // traffic runs in slow motion rather than teleporting.
+    // Advance by the wall-clock time since the last frame. The cap bounds a
+    // single step: a backgrounded tab or a long pause reports a huge elapsed
+    // time, and one step that size would fling cars through the ones ahead.
+    // Heavy load therefore renders in slow motion.
     if (!lastFrame) lastFrame = now;
     var elapsed = (now - lastFrame) / 1000;
     lastFrame = now;
@@ -312,8 +313,8 @@
       step(dt);
       drawRoad();
 
-      // Rows are emitted on simulated time, not per frame, so the slope of
-      // the jam bands means the same thing on every display.
+      // Rows are emitted on simulated time, so the slope of the jam bands
+      // means the same thing on every display.
       stAccum += dt;
       if (stAccum >= ST_ROW) {
         stAccum -= ST_ROW;
