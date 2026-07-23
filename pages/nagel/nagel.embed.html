@@ -1,0 +1,44 @@
+<div class="layout">
+  <section class="board">
+    <canvas id="road" width="460" height="460"></canvas>
+    <div class="stats">
+      <span>Velocidad media: <strong id="stat-speed">0 km/h</strong></span>
+      <span>Parados: <strong id="stat-stopped">0</strong></span>
+    </div>
+    <p class="hint">Pulsa sobre un coche para obligarle a dar un frenazo.</p>
+  </section>
+
+  <section class="panel">
+    <div class="control">
+      <label for="cars">Coches en el circuito: <span id="cars-val">38</span></label>
+      <input type="range" id="cars" min="5" max="70" step="1" value="38">
+    </div>
+
+    <div class="control">
+      <label for="dawdle">Despistes: <span id="dawdle-val">40%</span></label>
+      <input type="range" id="dawdle" min="0" max="100" step="5" value="40">
+      <small>Con qué frecuencia un conductor levanta el pie del acelerador sin motivo alguno.</small>
+    </div>
+
+    <div class="control">
+      <label for="vmax">Velocidad máxima: <span id="vmax-val">120 km/h</span></label>
+      <input type="range" id="vmax" min="60" max="140" step="10" value="120">
+    </div>
+
+    <div class="buttons">
+      <button id="brake" class="primary">¡Frenazo!</button>
+      <button id="run">Pausa</button>
+      <button id="reset">Reiniciar</button>
+    </div>
+  </section>
+</div>
+
+<figure class="spacetime-figure">
+  <canvas id="spacetime" width="460" height="140"></canvas>
+  <figcaption>
+    Diagrama espacio-tiempo: el circuito desenrollado en horizontal, el tiempo
+    avanza hacia abajo. Los coches van hacia la derecha; las bandas rojas que
+    se desplazan hacia la izquierda son el atasco recorriendo la autopista
+    marcha atrás.
+  </figcaption>
+</figure>
