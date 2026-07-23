@@ -15,7 +15,8 @@
   // sits in the middle as a third stop.
   var RED = { r: 230, g: 122, b: 114 };   // stopped
   var AMBER = { r: 242, g: 189, b: 132 }; // half speed
-  var GREEN = { r: 127, g: 191, b: 138 }; // as fast as anyone is going
+  var GREEN = { r: 127, g: 191, b: 138 }; // as fast as this density allows
+  var BLUE = { r: 47, g: 111, b: 237 };   // past it: escaping a jam
 
   // --- Physics constants (SI units) ---
   var L = 600;          // ring circumference, m
@@ -24,9 +25,16 @@
   var ACCEL = 2.5;      // m/s^2
   var BRAKE = 4.5;      // comfortable deceleration, m/s^2
   var TAU = 1.2;        // reaction/headway time, s
-  var DT = 0.05;        // s of simulated time per step (one step per frame)
   var DAWDLE_KICK = 5;  // a dawdle sheds up to this much speed, m/s
   var BRAKE_HOLD = 1.5; // a forced frenazo pins the car for this long, s
+  var ESCAPE_SPAN = 0.5; // full blue at this much above the equilibrium speed
+
+  // The step length is measured from the frame clock, so the traffic moves at
+  // the same rate on any display instead of tracking the refresh rate.
+  var TIME_SCALE = 3;   // simulated seconds per wall-clock second
+  var DT_MAX = 0.1;     // never integrate a longer step than this, s
+  var ST_ROW = 0.15;    // simulated seconds between space-time rows
+  var STAT_EVERY = 0.5; // simulated seconds between stat refreshes
 
   var roadCanvas = document.getElementById('road');
   var roadCtx = roadCanvas.getContext('2d');
@@ -48,7 +56,6 @@
   var vs = [];          // speed, m/s
   var brakeUntil = [];  // sim time until which the car is pinned at v = 0
   var t = 0;            // simulated time, s
-  var stepCount = 0;
   var running = true;
 
   // --- Ring geometry (canvas pixels) ---
@@ -62,10 +69,20 @@
   // Dawdle events per car per second: 0% -> never, 100% -> one every 2 s.
   function dawdleRate() { return parseInt(dawdleInput.value, 10) / 100 * 0.5; }
 
+  // Fastest a car can sustain at the current density: with n cars evenly
+  // spaced the equilibrium speed is the gap divided by the headway time,
+  // capped by the speed limit. Depends only on the two sliders, so it holds
+  // still while the traffic moves.
+  function freeSpeed() {
+    var n = parseInt(carsInput.value, 10);
+    var gap = L / n - CAR_LEN;
+    return Math.max(1, Math.min(vmaxMs(), gap / TAU));
+  }
+
   function init() {
     var n = parseInt(carsInput.value, 10);
     var spacing = L / n;
-    var v0 = Math.min(vmaxMs(), Math.max(0, (spacing - CAR_LEN)) / TAU);
+    var v0 = freeSpeed();
     xs = []; vs = []; brakeUntil = [];
     for (var i = 0; i < n; i++) {
       xs.push(i * spacing);
@@ -73,7 +90,7 @@
       brakeUntil.push(0);
     }
     t = 0;
-    stepCount = 0;
+
     stCtx.fillStyle = '#ffffff';
     stCtx.fillRect(0, 0, stCanvas.width, stCanvas.height);
   }
@@ -83,11 +100,11 @@
     return (xs[j] - xs[i] - CAR_LEN + L * 2) % L;
   }
 
-  function step() {
+  function step(dt) {
     var n = xs.length;
     var vmax = vmaxMs();
-    var pDawdle = dawdleRate() * DT;
-    t += DT;
+    var pDawdle = dawdleRate() * dt;
+    t += dt;
 
     // Parallel update: every new speed reads the previous state.
     var newVs = new Array(n);
@@ -96,7 +113,7 @@
       var g = gapAhead(i);
       var vl = vs[j];
       var vsafe = vl + (g - vl * TAU) / ((vs[i] + vl) / (2 * BRAKE) + TAU);
-      var nv = Math.min(vmax, vs[i] + ACCEL * DT, vsafe);
+      var nv = Math.min(vmax, vs[i] + ACCEL * dt, vsafe);
       nv = Math.max(0, nv);
       if (Math.random() < pDawdle) nv = Math.max(0, nv - Math.random() * DAWDLE_KICK);
       if (t < brakeUntil[i]) nv = 0;
@@ -104,7 +121,7 @@
     }
     for (i = 0; i < n; i++) {
       vs[i] = newVs[i];
-      xs[i] = (xs[i] + vs[i] * DT) % L;
+      xs[i] = (xs[i] + vs[i] * dt) % L;
     }
 
     // Safety pass: walk backwards from the car with the widest gap ahead,
@@ -125,30 +142,37 @@
         }
       }
     }
-    stepCount++;
   }
 
   // ---------------------------------------------------------------------------
   // Rendering
   // ---------------------------------------------------------------------------
 
-  // Colours are relative to the fastest car on the road right now, not to the
-  // vmax slider: what the eye should catch is who is slow *compared to the
-  // traffic around them*, which is exactly what a jam is.
-  var vRef = 1;
-
-  function updateRef() {
-    var m = 0;
-    for (var i = 0; i < vs.length; i++) if (vs[i] > m) m = vs[i];
-    vRef = m;
-  }
-
+  // The reference is what this density allows, not the fastest car on the
+  // road: a moving reference would restain every car on the ring whenever one
+  // of them accelerated out of a jam, a speed change that never happened.
+  // Referencing the speed limit instead would wash the ring red whenever the
+  // traffic is too dense to ever reach it.
   function speedColor(v) {
-    // Everyone stopped: no meaningful reference, so the whole ring is red.
-    var f = vRef < 1 ? 0 : Math.max(0, Math.min(1, v / vRef));
+    var ref = freeSpeed();
     var a, b_, t;
-    if (f < 0.5) { a = RED; b_ = AMBER; t = f * 2; }
-    else { a = AMBER; b_ = GREEN; t = (f - 0.5) * 2; }
+    if (v > ref) {
+      // Above the equilibrium — a car flooring it into the gap a jam leaves
+      // behind. The span is ESCAPE_SPAN above the equilibrium rather than all
+      // the way to the speed limit: cars escaping a queue overshoot by about
+      // half the equilibrium speed and never get near the limit, so scaling
+      // to the limit left every car within a hair of pure green. Still capped
+      // by the limit, so on a road empty enough that the limit *is* the
+      // equilibrium there is no headroom and nothing turns blue — correct,
+      // since with no queue to escape there is nothing to mark.
+      var head = Math.min(vmaxMs() - ref, ref * ESCAPE_SPAN);
+      a = GREEN; b_ = BLUE;
+      t = head > 0.1 ? Math.min(1, (v - ref) / head) : 0;
+    } else {
+      var f = Math.max(0, v / ref);
+      if (f < 0.5) { a = RED; b_ = AMBER; t = f * 2; }
+      else { a = AMBER; b_ = GREEN; t = (f - 0.5) * 2; }
+    }
     return 'rgb(' +
       Math.round(a.r + (b_.r - a.r) * t) + ',' +
       Math.round(a.g + (b_.g - a.g) * t) + ',' +
@@ -159,9 +183,6 @@
 
   function drawRoad() {
     var w = roadCanvas.width, h = roadCanvas.height;
-    // Every draw path goes through here before drawSpacetimeRow, so this is
-    // the one place the colour reference needs refreshing.
-    updateRef();
     roadCtx.clearRect(0, 0, w, h);
 
     roadCtx.beginPath();
@@ -273,12 +294,36 @@
     el('vmax-val').textContent = vmaxInput.value + ' km/h';
   });
 
-  function frame() {
+  var lastFrame = 0;
+  var stAccum = 0;   // simulated time owed to the space-time diagram
+  var statAccum = 0;
+
+  function frame(now) {
+    // Advance by the wall-clock time since the last frame, capped: a
+    // backgrounded tab or a long pause would otherwise hand us a step big
+    // enough to fling cars through the ones ahead. Under heavy load the
+    // traffic runs in slow motion rather than teleporting.
+    if (!lastFrame) lastFrame = now;
+    var elapsed = (now - lastFrame) / 1000;
+    lastFrame = now;
+
     if (running) {
-      step();
+      var dt = Math.min(elapsed * TIME_SCALE, DT_MAX);
+      step(dt);
       drawRoad();
-      if (stepCount % 3 === 0) drawSpacetimeRow();
-      if (stepCount % 10 === 0) updateStats();
+
+      // Rows are emitted on simulated time, not per frame, so the slope of
+      // the jam bands means the same thing on every display.
+      stAccum += dt;
+      if (stAccum >= ST_ROW) {
+        stAccum -= ST_ROW;
+        drawSpacetimeRow();
+      }
+      statAccum += dt;
+      if (statAccum >= STAT_EVERY) {
+        statAccum = 0;
+        updateStats();
+      }
     }
     requestAnimationFrame(frame);
   }

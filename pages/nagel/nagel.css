@@ -1,11 +1,16 @@
 :root {
-  /* Speed ramp: stopped -> red, as fast as anyone -> green, with the site's
-     apricot as the midpoint. Kept in sync with RED/AMBER/GREEN in nagel.js —
-     the canvas can't read CSS vars. */
+  /* Speed ramp: stopped -> red, apricot at half the equilibrium speed, green
+     at the equilibrium, blue past it (escaping a jam) up to the speed limit.
+     Kept in sync with RED/AMBER/GREEN/BLUE in nagel.js — the canvas can't
+     read CSS vars. */
   --red: #e67a72;
   --amber: #f2bd84;
   --green: #7fbf8a;
-  --blue: #9dc0ee;
+  --blue: #2f6fed; /* hotelling's blue: the escape end wants to shout */
+
+  /* UI accent, deliberately separate from the ramp above: the controls are
+     chrome and should stay quiet when the ramp colours change. */
+  --accent: #9dc0ee;
   --bg: #fafafa;
   --panel: #ffffff;
   --ink: #222;
@@ -108,7 +113,7 @@ p {
 
 input[type="range"] {
   width: 100%;
-  accent-color: var(--blue);
+  accent-color: var(--accent);
 }
 
 .buttons {
