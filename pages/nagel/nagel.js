@@ -24,12 +24,14 @@
   // --- Physics constants (SI units) ---
   var L = 600;          // ring circumference, m
   var CAR_LEN = 4.5;    // m
-  var MIN_GAP = 0.5;    // hard bumper-to-bumper minimum, m
-  var ACCEL = 2.0;      // m/s^2, an unhurried pull-away rather than a launch
+  var MIN_GAP = 0.2;    // hard bumper-to-bumper minimum, m
+  var ACCEL = 1.0;      // m/s^2, an unhurried pull-away rather than a launch
   var BRAKE = 4.5;      // comfortable deceleration, m/s^2
   var TAU = 1.2;        // reaction/headway time, s
   var DAWDLE_KICK = 5;  // a dawdle sheds up to this much speed, m/s
   var BRAKE_HOLD = 1.5; // a forced frenazo pins the car for this long, s
+  var REACT = 1.2;      // brake reaction latency: a driver who needs to slow
+                        // coasts this long before the brake actually goes on, s
 
   // Start-up lost time: a driver at a standstill does not pull away the
   // instant the road ahead clears. Queues therefore discharge one car at a
@@ -66,6 +68,8 @@
   var vs = [];          // speed, m/s
   var brakeUntil = [];  // sim time until which the car is pinned at v = 0
   var readyAt = [];     // sim time a stopped car may move off; 0 = not waiting
+  var reactStart = [];  // sim time the current braking episode became necessary;
+                        // 0 = not currently reacting to a slowdown
   var t = 0;            // simulated time, s
   var running = true;
 
@@ -94,12 +98,13 @@
     var n = parseInt(carsInput.value, 10);
     var spacing = L / n;
     var v0 = freeSpeed();
-    xs = []; vs = []; brakeUntil = []; readyAt = [];
+    xs = []; vs = []; brakeUntil = []; readyAt = []; reactStart = [];
     for (var i = 0; i < n; i++) {
       xs.push(i * spacing);
       vs.push(v0);
       brakeUntil.push(0);
       readyAt.push(0);
+      reactStart.push(0);
     }
     t = 0;
 
@@ -125,8 +130,32 @@
       var g = gapAhead(i);
       var vl = vs[j];
       var vsafe = vl + (g - vl * TAU) / ((vs[i] + vl) / (2 * BRAKE) + TAU);
-      var nv = Math.min(vmax, vs[i] + ACCEL * dt, vsafe);
-      nv = Math.max(0, nv);
+      var nvDesired = Math.max(0, Math.min(vmax, vs[i] + ACCEL * dt, vsafe));
+
+      // Brake reaction latency: when the road ahead forces a slowdown, the
+      // driver holds their current speed for REACT seconds before the brake
+      // actually goes on, then obeys the desired speed. The timer gates only
+      // the *onset* of a braking episode — accelerating away needs no reaction,
+      // so the desired speed passes straight through when it isn't a slowdown.
+      // Coasting into the gap this way is what turns a leader's tap of the
+      // brakes into the following car's harder, later one.
+      var nv;
+      if (nvDesired < vs[i] - 0.1) {
+        if (reactStart[i] === 0) reactStart[i] = t;
+        nv = (t - reactStart[i] < REACT) ? vs[i] : nvDesired;
+      } else {
+        reactStart[i] = 0;
+        nv = nvDesired;
+      }
+
+      // Emergency floor: the delay postpones the *comfortable* brake, but a car
+      // can never drive through its leader — during a long coast the gap can
+      // shrink below what the held speed would clear in one step. Cap so the gap
+      // cannot close past MIN_GAP even if the leader stopped dead. Inert while
+      // the gap is wide; at the last instant it forces a hard late brake, and it
+      // stops the modulo gap from wrapping (which read as an overtake).
+      nv = Math.min(nv, Math.max(0, (g - MIN_GAP) / dt));
+
       if (Math.random() < pDawdle) nv = Math.max(0, nv - Math.random() * DAWDLE_KICK);
       if (t < brakeUntil[i]) nv = 0;
 
