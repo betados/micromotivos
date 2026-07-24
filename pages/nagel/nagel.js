@@ -25,11 +25,18 @@
   var L = 600;          // ring circumference, m
   var CAR_LEN = 4.5;    // m
   var MIN_GAP = 0.5;    // hard bumper-to-bumper minimum, m
-  var ACCEL = 2.5;      // m/s^2
+  var ACCEL = 2.0;      // m/s^2, an unhurried pull-away rather than a launch
   var BRAKE = 4.5;      // comfortable deceleration, m/s^2
   var TAU = 1.2;        // reaction/headway time, s
   var DAWDLE_KICK = 5;  // a dawdle sheds up to this much speed, m/s
   var BRAKE_HOLD = 1.5; // a forced frenazo pins the car for this long, s
+
+  // Start-up lost time: a driver at a standstill does not pull away the
+  // instant the road ahead clears. Queues therefore discharge one car at a
+  // time from the front, which is what makes a jam outlive the braking that
+  // caused it.
+  var START_DELAY = 0.7; // s spent stationary before moving off
+  var CREEP = 0.3;       // below this a car counts as stopped, m/s
   var ESCAPE_SPAN = 0.5; // full blue at this much above the equilibrium speed
 
   // The step length is measured from the frame clock, so the traffic advances
@@ -58,6 +65,7 @@
   var xs = [];          // position along the ring, m in [0, L)
   var vs = [];          // speed, m/s
   var brakeUntil = [];  // sim time until which the car is pinned at v = 0
+  var readyAt = [];     // sim time a stopped car may move off; 0 = not waiting
   var t = 0;            // simulated time, s
   var running = true;
 
@@ -86,11 +94,12 @@
     var n = parseInt(carsInput.value, 10);
     var spacing = L / n;
     var v0 = freeSpeed();
-    xs = []; vs = []; brakeUntil = [];
+    xs = []; vs = []; brakeUntil = []; readyAt = [];
     for (var i = 0; i < n; i++) {
       xs.push(i * spacing);
       vs.push(v0);
       brakeUntil.push(0);
+      readyAt.push(0);
     }
     t = 0;
 
@@ -120,6 +129,17 @@
       nv = Math.max(0, nv);
       if (Math.random() < pDawdle) nv = Math.max(0, nv - Math.random() * DAWDLE_KICK);
       if (t < brakeUntil[i]) nv = 0;
+
+      // A car at a standstill waits out START_DELAY once the road ahead opens.
+      // The clock only runs while it could actually move, so a car still boxed
+      // in by the one in front is not quietly serving its wait.
+      if (vs[i] >= CREEP || nv <= 0) {
+        readyAt[i] = 0;
+      } else {
+        if (readyAt[i] === 0) readyAt[i] = t + START_DELAY;
+        if (t < readyAt[i]) nv = 0;
+      }
+
       newVs[i] = nv;
     }
     for (i = 0; i < n; i++) {
